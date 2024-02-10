@@ -1,16 +1,18 @@
 <script>
+  // @ts-nocheck
+
   import { Line } from 'svelte-chartjs';
   import { data } from './data.js';
 
   import {
+    CategoryScale,
     Chart as ChartJS,
-    Title,
-    Tooltip,
     Legend,
     LineElement,
     LinearScale,
     PointElement,
-    CategoryScale,
+    Title,
+    Tooltip,
   } from 'chart.js';
 
   ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
