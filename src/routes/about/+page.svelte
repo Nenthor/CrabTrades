@@ -1,6 +1,6 @@
 <h1>About us</h1>
 
-<p>Sample text1</p>
+<p>Expirimental speculative algorithm for stocks</p>
 
 <p>Sample text2</p>
 
