@@ -1,7 +1,5 @@
 <script lang="ts">
-  import Navbar from '$lib/Navbar.svelte';
-
-  let firework: HTMLCanvasElement;
+  import Navbar from '$lib/components/Navbar.svelte';
 </script>
 
 <div class="container">
@@ -9,7 +7,6 @@
     <li><a href="/about">About</a></li>
   </Navbar>
 
-  <canvas bind:this={firework} class="firework" />
   <h1>About us</h1>
 
   <p>Expirimental speculative algorithm for stocks</p>

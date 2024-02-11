@@ -1,9 +1,10 @@
 <script lang="ts">
-  import Navbar from '$lib/Navbar.svelte';
-  import ChartFromTable from './components/ChartFromTable.svelte';
+  import Navbar from '$lib/components/Navbar.svelte';
+  import ChartFromTable from '../lib/components/ChartFromTable.svelte';
 </script>
 
 <Navbar>
+  <li><a href="/fetchcontroll">FetchControll</a></li>
   <li><a href="/about">About</a></li>
 </Navbar>
 

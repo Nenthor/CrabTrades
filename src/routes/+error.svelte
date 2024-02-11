@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import logo from '$lib/assets/Error.png';
 </script>
 
 <body>
@@ -22,6 +21,6 @@
   </style>
 
   <h1 class="div" style="font-size:30px;">
-    {$page.status}: {$page.error?.message} <img alt="" src={logo} width="50" height="50" />
+    {$page.status}: {$page.error?.message} <img alt="" src="/images/error.png" width="50" height="50" />
   </h1>
 </body>

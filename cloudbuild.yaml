@@ -8,7 +8,7 @@ steps:
     args:
       - '-c'
       - |
-        docker build . -t ${_IMAGE_NAME} --build-arg DB_TOKEN=$$DB_TOKEN --build-arg ALPACA_KEY=$$ALPACA_KEY --build-arg ALPACA_SECRET=$$ALPACA_SECRET
+        docker build . -t ${_IMAGE_NAME} --build-arg DB_TOKEN=$$DB_TOKEN --build-arg ALPACA_KEY=$$ALPACA_KEY --build-arg ALPACA_SECRET=$$ALPACA_SECRET --build-arg BUCKET_ACCESS_TOKEN=$$BUCKET_ACCESS_TOKEN
     secretEnv: ['DB_TOKEN', 'ALPACA_KEY', 'ALPACA_SECRET']
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
@@ -40,3 +40,5 @@ availableSecrets:
       env: 'ALPACA_KEY'
     - versionName: projects/${PROJECT_ID}/secrets/alpaca-secret/versions/latest
       env: 'ALPACA_SECRET'
+    - versionName: projects/${PROJECT_ID}/secrets/bucket-access-token/versions/latest
+      env: 'BUCKET_ACCESS_TOKEN'

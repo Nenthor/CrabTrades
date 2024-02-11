@@ -1,7 +1,7 @@
 <script lang="ts">
   import Chart from 'chart.js/auto';
   import { onMount } from 'svelte';
-  import type { ChartProps } from './types';
+  import type { ChartProps } from '../Types';
 
   import {
     BarController,

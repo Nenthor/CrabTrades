@@ -1,6 +1,6 @@
 <script lang="ts">
-  import SimpleChart from '$lib/SimpleChart.svelte';
-  import type { ChartProps, StockData } from '$lib/types';
+  import SimpleChart from '$lib/components/SimpleChart.svelte';
+  import type { ChartProps, StockData } from '$lib/Types';
   import { onMount } from 'svelte';
 
   let showGraph = false;
