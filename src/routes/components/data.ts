@@ -1,10 +1,11 @@
-export const data = {
+import type { ChartData, Point } from 'chart.js';
+
+export const data: ChartData<'line', (number | Point)[], unknown> = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [
     {
       label: 'My First dataset',
       fill: true,
-      lineTension: 0.3,
       backgroundColor: 'rgba(225, 204,230, .3)',
       borderColor: 'rgb(205, 130, 158)',
       borderCapStyle: 'butt',
@@ -25,7 +26,6 @@ export const data = {
     {
       label: 'My Second dataset',
       fill: true,
-      lineTension: 0.3,
       backgroundColor: 'rgba(184, 185, 210, .3)',
       borderColor: 'rgb(35, 26, 136)',
       borderCapStyle: 'butt',
@@ -45,3 +45,5 @@ export const data = {
     },
   ],
 };
+
+// export const tableData: ChartData<'line', (number | Point)[], unknown> = {};
