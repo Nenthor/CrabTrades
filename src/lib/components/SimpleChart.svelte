@@ -1,8 +1,5 @@
 <script lang="ts">
-  import Chart from 'chart.js/auto';
-  import { onMount } from 'svelte';
-  import type { ChartProps } from '../Types';
-
+  import type { ChartProps } from '$lib/types';
   import {
     BarController,
     BarElement,
@@ -16,6 +13,8 @@
     Tooltip,
     type ChartData,
   } from 'chart.js';
+  import Chart from 'chart.js/auto';
+  import { onMount } from 'svelte';
 
   ChartJS.register(LinearScale, CategoryScale, BarElement, PointElement, LineElement, Legend, Tooltip, LineController, BarController);
 
