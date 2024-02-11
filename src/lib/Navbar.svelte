@@ -97,17 +97,6 @@
     align-items: center;
   }
 
-  #nav_title {
-    padding: 0 clamp(10px, 3vw, 40px);
-    font-weight: bold;
-    font-size: 1.6rem;
-    letter-spacing: 0.15rem;
-    color: var(--crabred);
-    text-shadow: 0 0 2px #b35e19;
-    user-select: none;
-    text-transform: uppercase;
-  }
-
   #nav_list {
     list-style: none;
     color: #161616;
