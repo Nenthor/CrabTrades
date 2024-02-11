@@ -9,7 +9,7 @@ steps:
       - '-c'
       - |
         docker build . -t ${_IMAGE_NAME} --build-arg DB_TOKEN=$$DB_TOKEN --build-arg ALPACA_KEY=$$ALPACA_KEY --build-arg ALPACA_SECRET=$$ALPACA_SECRET --build-arg BUCKET_ACCESS_TOKEN=$$BUCKET_ACCESS_TOKEN
-    secretEnv: ['DB_TOKEN', 'ALPACA_KEY', 'ALPACA_SECRET']
+    secretEnv: ['DB_TOKEN', 'ALPACA_KEY', 'ALPACA_SECRET', 'BUCKET_ACCESS_TOKEN']
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     id: push
