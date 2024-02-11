@@ -32,6 +32,7 @@
     "vitest": "^1.2.2"
   },
   "dependencies": {
+    "@alpacahq/alpaca-trade-api": "^3.0.1",
     "@sveltejs/adapter-node": "^4.0.1",
     "@types/chart.js": "^2.9.41",
     "chart.js": "^4.4.1",

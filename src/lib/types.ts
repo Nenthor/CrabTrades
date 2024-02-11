@@ -4,6 +4,7 @@ export interface ChartProps {
     type: 'line' | 'bubble';
     label: string;
     data: number[];
+    color?: string;
   }[];
 }
 
