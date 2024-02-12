@@ -121,4 +121,27 @@
     max-height: calc(100vh - 75px);
     overflow-y: auto;
   }
+
+  input {
+    padding: 5px;
+    border-radius: 10px;
+    border: 3px solid transparent;
+    font-size: medium;
+    outline: transparent;
+  }
+
+  input:focus {
+    border: 3px solid #4d92d8;
+  }
+
+  button {
+    padding: 10px 25px;
+    border-radius: 50px;
+    background-color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+    border: none;
+    cursor: pointer;
+  }
 </style>

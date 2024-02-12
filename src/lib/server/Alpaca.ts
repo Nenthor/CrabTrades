@@ -3,9 +3,9 @@ import Alpaca from '@alpacahq/alpaca-trade-api';
 import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
 
 // Docs: https://github.com/alpacahq/alpaca-trade-api-js
+// Environment variables ALPACA_KEY and ALPACA_SECRET must be set
 
 export type TimeFrame = '1Min' | '15Min' | '30Min' | '1Hour' | '1Day' | '1Week';
-export const CSV_START = 'Symbol,Timestamp,Open,Close,Low,High,VWAP\n'; // You need to update CSV_START_CLIENT in types.ts as well
 
 /**
  * Fetches historical stock data from Alpaca for the given symbol and time frame
@@ -55,26 +55,4 @@ export async function getHistoricalStockDataAwait(symbol: string, start: Date, e
     data.push(value);
   }
   return data;
-}
-
-/**
- * Converts the bars to a CSV string in the style of `Symbol,Date,Open,High,Low,Close,Volume`
- * @param bars AsyncGenerator of AlpacaBar
- * @returns CSV string
- */
-export async function toStockFileString(bars: AsyncGenerator<AlpacaBar, void, unknown>) {
-  let file = CSV_START;
-  for await (const bar of bars) {
-    file += toStockString(bar) + '\n';
-  }
-  return file;
-}
-
-/**
- * Converts single bar to a CSV string in the style of 'Symbol,Timestamp,Open,Close,Low,High,VWAP'
- * @param bars AlpacaBar
- * @returns CSV string
- */
-export function toStockString(bar: AlpacaBar) {
-  return `${bar.Symbol},${bar.Timestamp},${bar.OpenPrice},${bar.ClosePrice},${bar.LowPrice},${bar.HighPrice},${bar.VWAP}`;
 }

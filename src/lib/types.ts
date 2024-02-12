@@ -17,6 +17,3 @@ export interface StockData {
   close: number;
   volume: number;
 }
-
-// You need to update CSV_START in Alpaca.ts as well
-export const CSV_START_CLIENT = 'Symbol,Timestamp,Open,Close,Low,High,VWAP';

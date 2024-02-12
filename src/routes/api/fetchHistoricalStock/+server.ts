@@ -1,4 +1,5 @@
-import { CSV_START, getHistoricalStockData } from '$lib/server/Alpaca';
+import { CSV_START } from '$lib/AlpacaPublic';
+import { getHistoricalStockData } from '$lib/server/Alpaca';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const POST = (async ({ request }) => {
@@ -22,6 +23,7 @@ export const POST = (async ({ request }) => {
       controller.close();
     },
     cancel() {
+      console.log('Fetching cancelled.');
       data.return();
     },
   });
