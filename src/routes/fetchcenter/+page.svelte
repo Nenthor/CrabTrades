@@ -144,7 +144,7 @@
 <Navbar />
 
 <div class="container">
-  <h1 class="title">FetchControll</h1>
+  <h1 class="title">FetchCenter</h1>
   {#if status == 'Choosing'}
     <div class="select">
       <h2>Choose stock data</h2>

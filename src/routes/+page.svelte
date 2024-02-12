@@ -4,7 +4,7 @@
 </script>
 
 <Navbar>
-  <li><a href="/fetchcontroll">FetchControll</a></li>
+  <li><a href="/fetchcenter">FetchCenter</a></li>
   <li><a href="/about">About</a></li>
 </Navbar>
 
