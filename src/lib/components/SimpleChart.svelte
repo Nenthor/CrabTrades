@@ -14,6 +14,7 @@
     type ChartData,
   } from 'chart.js';
   import Chart from 'chart.js/auto';
+  import 'chartjs-adapter-luxon';
   import { onMount } from 'svelte';
 
   ChartJS.register(LinearScale, CategoryScale, BarElement, PointElement, LineElement, Legend, Tooltip, LineController, BarController);
@@ -61,8 +62,11 @@
             duration: 0,
           },
           scales: {
-            y: {
-              beginAtZero: true,
+            x: {
+              type: 'time',
+              time: {
+                tooltipFormat: 'DD T',
+              },
             },
           },
         },
@@ -72,6 +76,7 @@
 
   function updateChart(chartProps: ChartProps) {
     if (!chartProps || !chart) return;
+    chart.data.datasets[0].label = chartProps.datasets[0].label;
     chart.update();
   }
 </script>

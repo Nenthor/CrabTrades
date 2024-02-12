@@ -39,6 +39,9 @@
       throw new Error('Error initializing upload request.');
     }
 
+    chartProps.datasets[0].label = symbol;
+    chartProps = chartProps;
+
     reader = response.body.getReader();
     const decoder = new TextDecoder();
     let unfinishedMsg = '';
@@ -46,7 +49,7 @@
       const { done, value } = await reader.read();
 
       if (done) {
-        console.log('Stream complete');
+        console.log('Finished fetching data');
         break;
       }
       const msg = decoder.decode(value);
@@ -54,7 +57,7 @@
       for (let barString of barsString) {
         if (barString === CSV_START || !barString) continue;
         if (!barString.endsWith('}')) {
-          unfinishedMsg = barString;
+          unfinishedMsg += barString;
           continue;
         }
         if (!barString.startsWith('{')) {
@@ -63,7 +66,7 @@
         }
 
         const bar: AlpacaBar = JSON.parse(barString);
-        chartProps.xLabels.push(formatDate(bar.Timestamp, timeFrame.includes('Min') || timeFrame.includes('Hour')));
+        chartProps.xLabels.push(bar.Timestamp);
         chartProps.datasets[0].data.push(bar.ClosePrice);
         bars.push(bar);
       }
@@ -78,7 +81,7 @@
     datasets: [
       {
         type: 'line',
-        label: 'AAPL',
+        label: 'Stonks',
         data: [],
       },
     ],
