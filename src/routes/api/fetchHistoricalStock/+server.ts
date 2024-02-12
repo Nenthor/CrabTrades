@@ -1,4 +1,4 @@
-import { getHistoricalStockData, toStockString } from '$lib/server/Alpaca';
+import { CSV_START, getHistoricalStockData } from '$lib/server/Alpaca';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const POST = (async ({ request }) => {
@@ -11,13 +11,13 @@ export const POST = (async ({ request }) => {
     return new Response('Missing required parameters', { status: 400 });
   }
 
-  const data = getHistoricalStockData([symbol], new Date(startDate), new Date(endDate), timeframe);
+  const data = getHistoricalStockData(symbol, new Date(startDate), new Date(endDate), timeframe);
 
   const stream = new ReadableStream({
     async start(controller) {
-      controller.enqueue('start');
+      controller.enqueue(CSV_START);
       for await (const value of data) {
-        controller.enqueue(toStockString(value) + '\n');
+        controller.enqueue(JSON.stringify(value) + '\n');
       }
       controller.close();
     },

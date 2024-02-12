@@ -21,6 +21,9 @@
   export let chartProps: ChartProps;
 
   let canvas: HTMLCanvasElement;
+  let chart: ChartJS;
+
+  $: updateChart(chartProps);
 
   const datasets: ChartData['datasets'] = [];
   chartProps.datasets.forEach((dataset) => {
@@ -45,20 +48,19 @@
   onMount(() => {
     const ctx = canvas.getContext('2d');
     if (ctx) {
-      new Chart(ctx, {
+      chart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: chartProps.xLabels,
           datasets: datasets,
+          labels: chartProps.xLabels,
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          animation: {
+            duration: 0,
+          },
           scales: {
-            x: {
-              type: 'category',
-              labels: chartProps.xLabels,
-            },
             y: {
               beginAtZero: true,
             },
@@ -67,6 +69,11 @@
       });
     }
   });
+
+  function updateChart(chartProps: ChartProps) {
+    if (!chartProps || !chart) return;
+    chart.update();
+  }
 </script>
 
 <canvas bind:this={canvas} />
