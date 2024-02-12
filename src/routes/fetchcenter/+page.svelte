@@ -55,12 +55,13 @@
       const msg = decoder.decode(value);
       const barsString = msg.split('\n');
       for (let barString of barsString) {
-        if (barString === CSV_START || !barString) continue;
+        if (barString == CSV_START || !barString) continue;
         if (!barString.endsWith('}')) {
           unfinishedMsg += barString;
           continue;
         }
         if (!barString.startsWith('{')) {
+          if (unfinishedMsg == '') continue;
           barString = unfinishedMsg + barString;
           unfinishedMsg = '';
         }
@@ -86,24 +87,6 @@
       },
     ],
   };
-
-  function formatDate(timestamp: string, clocktime = false) {
-    if (clocktime) {
-      return new Date(timestamp).toLocaleDateString('de-DE', {
-        month: 'numeric',
-        year: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      });
-    } else {
-      return new Date(timestamp).toLocaleDateString('de-DE', {
-        month: 'numeric',
-        year: 'numeric',
-        day: 'numeric',
-      });
-    }
-  }
 
   let symbol = 'AAPL';
   let startDate = '2021-01-01';
@@ -217,6 +200,7 @@
     aspect-ratio: 2 / 1;
     width: 90vw;
     max-height: 50vh;
+    min-height: 250px;
   }
 
   .select {
