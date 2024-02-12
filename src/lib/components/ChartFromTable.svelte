@@ -92,13 +92,7 @@
         close: parseFloat(entry[4]),
         volume: parseInt(entry[6]),
       };
-      chartProps.xLabels.push(
-        stock.date.toLocaleDateString('de-DE', {
-          month: 'numeric',
-          year: 'numeric',
-          day: 'numeric',
-        }),
-      );
+      chartProps.xLabels.push(entry[0]);
       chartProps.datasets[0].data.push(stock.close);
       chartProps.datasets[0].label = 'APPLE LINIE';
       chartProps.datasets[1].data.push(stock.close / 2.0);
