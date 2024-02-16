@@ -10,6 +10,10 @@ steps:
       - |
         docker build . -t ${_IMAGE_NAME} --build-arg DB_TOKEN=$$DB_TOKEN --build-arg ALPACA_KEY=$$ALPACA_KEY --build-arg ALPACA_SECRET=$$ALPACA_SECRET --build-arg BUCKET_PRIVATE_KEY=$$BUCKET_PRIVATE_KEY
     secretEnv: ['DB_TOKEN', 'ALPACA_KEY', 'ALPACA_SECRET', 'BUCKET_PRIVATE_KEY']
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: push
+    args: ['push', '${_IMAGE_NAME}']
   # Deploy container image to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     id: deploy
@@ -26,10 +30,6 @@ steps:
         '--platform',
         'managed',
       ]
-
-# Push the container image to Artifact Registry if build was successful
-images:
-  - ${_IMAGE_NAME}
 
 timeout: '300s' # timeout after 5 minutes
 availableSecrets:
