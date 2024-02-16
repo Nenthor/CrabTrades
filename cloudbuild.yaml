@@ -1,5 +1,5 @@
 substitutions:
-  _IMAGE_NAME: ${LOCATION}-docker.pkg.dev/${PROJECT_ID}/web-registry/${_CLOUD_RUN_SERVICE}:${COMMIT_SHA}
+  _IMAGE_NAME: ${LOCATION}-docker.pkg.dev/${PROJECT_ID}/web-registry/${_CLOUD_RUN_SERVICE}
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
