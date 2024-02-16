@@ -1,5 +1,5 @@
 substitutions:
-  _IMAGE_NAME: ${LOCATION}-docker.pkg.dev/${PROJECT_ID}/web-registry/${_CLOUD_RUN_SERVICE}
+  _IMAGE_NAME: ${LOCATION}-docker.pkg.dev/${PROJECT_ID}/web-registry/${_CLOUD_RUN_SERVICE}:${COMMIT_SHA}
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
@@ -8,7 +8,7 @@ steps:
     args:
       - '-c'
       - |
-        docker build . -t ${_IMAGE_NAME} --build-arg DB_TOKEN=$$DB_TOKEN --build-arg ALPACA_KEY=$$ALPACA_KEY --build-arg ALPACA_SECRET=$$ALPACA_SECRET --build-arg BUCKET_ACCESS_TOKEN=$$BUCKET_ACCESS_TOKEN
+        docker build . -t ${_IMAGE_NAME} --build-arg DB_TOKEN=$$DB_TOKEN --build-arg ALPACA_KEY=$$ALPACA_KEY --build-arg ALPACA_SECRET=$$ALPACA_SECRET --build-arg BUCKET_ACCESS_TOKEN="$(BUCKET_ACCESS_TOKEN)"
     secretEnv: ['DB_TOKEN', 'ALPACA_KEY', 'ALPACA_SECRET', 'BUCKET_ACCESS_TOKEN']
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
