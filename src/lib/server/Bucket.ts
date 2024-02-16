@@ -85,7 +85,7 @@ function getStorage() {
       type: 'service_account',
       project_id: 'crabtrades',
       private_key_id: '1c03a24a34ef6e9a9acf7622e6737a725e9d44c1',
-      private_key: `-----BEGIN PRIVATE KEY-----\n${BUCKET_ACCESS_TOKEN}\n-----END PRIVATE KEY-----\n`,
+      private_key: BUCKET_ACCESS_TOKEN,
       client_email: 'cloud-storage@crabtrades.iam.gserviceaccount.com',
       client_id: '102891660250361893261',
       universe_domain: 'googleapis.com',
