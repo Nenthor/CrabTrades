@@ -1,4 +1,4 @@
-import { BUCKET_ACCESS_TOKEN } from '$env/static/private';
+import { BUCKET_PRIVATE_KEY } from '$env/static/private';
 import { Storage } from '@google-cloud/storage';
 
 type BucketId = 'historical-stock-data';
@@ -85,7 +85,7 @@ function getStorage() {
       type: 'service_account',
       project_id: 'crabtrades',
       private_key_id: '1c03a24a34ef6e9a9acf7622e6737a725e9d44c1',
-      private_key: `-----BEGIN PRIVATE KEY-----\n${BUCKET_ACCESS_TOKEN}\n-----END PRIVATE KEY-----`.replace(/\\n/g, '\n'),
+      private_key: `-----BEGIN PRIVATE KEY-----\n${BUCKET_PRIVATE_KEY}\n-----END PRIVATE KEY-----`.replace(/\\n/g, '\n'),
       client_email: 'cloud-storage@crabtrades.iam.gserviceaccount.com',
       client_id: '102891660250361893261',
       universe_domain: 'googleapis.com',
