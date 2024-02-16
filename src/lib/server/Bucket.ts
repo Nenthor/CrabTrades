@@ -1,7 +1,9 @@
 import { BUCKET_ACCESS_TOKEN } from '$env/static/private';
-import { Bucket, Storage } from '@google-cloud/storage';
+import { Storage } from '@google-cloud/storage';
 
 type BucketId = 'historical-stock-data';
+
+const storage = getStorage();
 
 /**
  * Fetches the content of a file from Google Cloud Bucket. (File needs to exist)
@@ -11,10 +13,6 @@ type BucketId = 'historical-stock-data';
  */
 export async function fetchFile(bucketId: BucketId, path: string) {
   const bucket = getBucket(bucketId);
-  if (!(await fileExistsInternal(bucket, path))) {
-    throw new Error(`File not found: ${path}`);
-  }
-
   const file = bucket.file(path);
   const [content] = await file.download();
   return content.toString();
@@ -34,18 +32,26 @@ export async function uploadFile(bucketId: BucketId, path: string, content: stri
 }
 
 /**
- * Deletes a file from Google Cloud Bucket.
+ * Deletes a file from Google Cloud Bucket. (File needs to exist)
  * @param bucketId Id of the bucket
  * @param path Path to the file. Example: `test.txt` or `AAPL/1Day.json`
+ * @param ignoreNotFound If `true`, the function will not throw an error if the file does not exist
  */
-export async function deleteFile(bucketId: BucketId, path: string) {
+export async function deleteFile(bucketId: BucketId, path: string, ignoreNotFound = false) {
   const bucket = getBucket(bucketId);
-  if (!(await fileExistsInternal(bucket, path))) {
-    throw new Error(`File not found: ${path}`);
-  }
-
   const file = bucket.file(path);
-  await file.delete({ ignoreNotFound: true });
+  await file.delete({ ignoreNotFound });
+}
+
+/**
+ * Combines multiple files into one. (Files need to exist)
+ * @param bucketId Id of the bucket
+ * @param sources The files to combine. The order will be preserved. Example: `['test.txt', 'AAPL/1Day.json']`
+ * @param destination The path to the file to create or overwrite. Example: `test.txt` or `AAPL/1Day.json`
+ */
+export async function combineFiles(bucketId: BucketId, sources: string[], destination: string) {
+  const bucket = getBucket(bucketId);
+  await bucket.combine(sources, destination);
 }
 
 /**
@@ -55,15 +61,24 @@ export async function deleteFile(bucketId: BucketId, path: string) {
  * @returns `true` if the file exists, `false` otherwise
  */
 export async function fileExists(bucketId: BucketId, path: string) {
-  return await fileExistsInternal(getBucket(bucketId), path);
-}
-
-async function fileExistsInternal(bucket: Bucket, path: string) {
+  const bucket = getBucket(bucketId);
   const file = bucket.file(path);
   return (await file.exists())[0];
 }
 
-function getBucket(bucketId: BucketId) {
+/**
+ * Renames a file in Google Cloud Bucket. (File needs to exist)
+ * @param bucketId Id of the bucket
+ * @param oldPath The current path to the file. Example: `test.txt` or `AAPL/1Day.json`
+ * @param newPath The new path to the file. Example: `test2.txt` or `AAPL/1Day2.json`
+ */
+export async function renameFile(bucketId: BucketId, oldPath: string, newPath: string) {
+  const bucket = getBucket(bucketId);
+  const file = bucket.file(oldPath);
+  await file.move(newPath);
+}
+
+function getStorage() {
   return new Storage({
     projectId: 'crabtrades',
     credentials: {
@@ -75,5 +90,9 @@ function getBucket(bucketId: BucketId) {
       client_id: '102891660250361893261',
       universe_domain: 'googleapis.com',
     },
-  }).bucket(bucketId);
+  });
+}
+
+function getBucket(bucketId: BucketId) {
+  return storage.bucket(bucketId);
 }
