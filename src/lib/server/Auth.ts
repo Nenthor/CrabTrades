@@ -31,6 +31,6 @@ export function loginUser(username: string, password: string, cookies: Cookies) 
   if (password !== PASSWORD) return false;
 
   const token = jwt.sign({ sub: username }, JWT_SECRET, { expiresIn });
-  cookies.set(cookieName, token, { path: '/', sameSite: 'lax', secure: true, maxAge: 60 * 60 * 24 * 7 });
+  cookies.set(cookieName, token, { path: '/', sameSite: 'lax', secure: true, httpOnly: true, maxAge: expiresIn });
   return true;
 }
