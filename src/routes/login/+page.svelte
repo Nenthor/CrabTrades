@@ -44,7 +44,7 @@
       disabled = false;
       return;
     }
-
+    console.log(response);
     // Update the message and type from the response
     const data = await response.json();
     type = data.type;
@@ -87,11 +87,11 @@
     <p>Enter your username and password for unlimited access to CrabTrades.com!</p>
     <div>
       <label for="username">Username:</label>
-      <input bind:value={username} bind:this={autoFocusElement} type="text" required autocomplete="off" />
+      <input bind:value={username} bind:this={autoFocusElement} id="username" type="text" required autocomplete="off" />
     </div>
     <div>
       <label for="password">Password:</label>
-      <input bind:value={password} type="password" required />
+      <input bind:value={password} id="password" type="password" required />
     </div>
 
     {#if type === 'error' || type === 'success'}
