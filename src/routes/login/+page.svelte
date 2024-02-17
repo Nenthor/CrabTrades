@@ -38,6 +38,13 @@
       },
     });
 
+    if (!response.ok) {
+      type = 'error';
+      message = 'An error occurred. Please try again later.';
+      disabled = false;
+      return;
+    }
+
     // Update the message and type from the response
     const data = await response.json();
     type = data.type;
