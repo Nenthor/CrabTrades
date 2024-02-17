@@ -48,6 +48,6 @@ async function createScore(token: string) {
   const recaptcha = await fetch(RECAPTCHA_URL.replace('token', token)).then(async (res) => await res.json());
   console.log('recaptcha:', recaptcha);
   // Return recaptcha score. Higher is better.
-  if (recaptcha || !recaptcha.success) return 0;
+  if (!recaptcha || !recaptcha.success) return 0;
   else return recaptcha.score;
 }
