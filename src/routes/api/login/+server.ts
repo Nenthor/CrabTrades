@@ -9,8 +9,6 @@ export const POST = (async ({ request, cookies }) => {
   const password = request.headers.get('password')?.toString().trim();
   const token = request.headers.get('token')?.toString().trim();
 
-  console.log('username:', username, 'password:', password, 'token:', token);
-
   if (!username || !password || !token) {
     return getResponse('error', 'Username or password missing.');
   }
@@ -20,7 +18,7 @@ export const POST = (async ({ request, cookies }) => {
 
   // Get Recaptcha Score
   const score = await createScore(token);
-  console.log('Recaptcha score:', score);
+
   if (score < 0.8) {
     return getResponse('error', 'Recaptcha failed. Try again.');
   }
@@ -47,7 +45,7 @@ function checkDataIntegrity(username: string, password: string) {
 
 async function createScore(token: string) {
   const recaptcha = await fetch(RECAPTCHA_URL.replace('token', token)).then(async (res) => await res.json());
-  console.log('Recaptcha:', recaptcha);
+
   // Return recaptcha score. Higher is better.
   if (!recaptcha || !recaptcha.success) return 0;
   else return recaptcha.score;

@@ -14,12 +14,13 @@ export const defaultUser: User = { name: 'Crabuser' };
 
 export async function getUserFromCookies(cookies: Cookies): Promise<User | undefined> {
   const token = cookies.get(cookieName);
+  console.log('token', token);
   if (!token) return;
 
   try {
     const { sub } = jwt.verify(token, JWT_SECRET);
     if (typeof sub !== 'string') throw new Error('Invalid token');
-
+    console.log('sub', sub);
     return { name: sub.toString() };
   } catch (e) {
     console.error(e);

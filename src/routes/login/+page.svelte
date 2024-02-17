@@ -44,7 +44,7 @@
       disabled = false;
       return;
     }
-    console.log(response);
+
     // Update the message and type from the response
     const data = await response.json();
     type = data.type;

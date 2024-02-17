@@ -24,5 +24,7 @@ export const handle: Handle = (async ({ event, resolve }) => {
     user: user || defaultUser,
   };
 
+  console.log('event.locals', event.locals);
+
   return resolve(event);
 }) satisfies Handle;
