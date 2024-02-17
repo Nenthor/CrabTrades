@@ -5,10 +5,9 @@ import { type RequestHandler } from '@sveltejs/kit';
 const RECAPTCHA_URL = `https://google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET}&response=token`;
 
 export const POST = (async ({ request, cookies, url }) => {
-  const form = await request.formData();
-  const username = form.get('username')?.toString().trim();
-  const password = form.get('password')?.toString().trim();
-  const token = form.get('token')?.toString().trim();
+  const username = request.headers.get('username')?.toString().trim();
+  const password = request.headers.get('password')?.toString().trim();
+  const token = request.headers.get('token')?.toString().trim();
 
   if (!username || !password || !token) {
     return getResponse('error', 'Username or password missing.');

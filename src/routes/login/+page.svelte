@@ -12,14 +12,13 @@
     // @ts-ignore ignore grecaptcha not found
     const token = await grecaptcha.execute(PUBLIC_KEY, { action: 'LOGIN' });
 
-    const form = new FormData();
-    form.append('username', username);
-    form.append('password', password);
-    form.append('token', token);
-
     const response = await fetch('/api/login', {
       method: 'POST',
-      body: form,
+      headers: {
+        username,
+        password,
+        token,
+      },
     });
 
     // Update the message and type from the response
