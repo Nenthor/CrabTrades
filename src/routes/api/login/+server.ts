@@ -16,11 +16,9 @@ export const POST = (async ({ request, cookies, url }) => {
     return getResponse('error', 'Only letters, numbers and underscores are allowed.');
   }
 
+  // Get Recaptcha Score
   const score = await createScore(token);
-  console.log('score:', score);
-
-  // Disable recaptcha for localhost
-  if (score < 0.8 && url.hostname !== 'localhost') {
+  if (score < 0.8) {
     return getResponse('error', 'Recaptcha failed. Try again.');
   }
 
@@ -29,7 +27,7 @@ export const POST = (async ({ request, cookies, url }) => {
     return getResponse('error', 'Invalid username or password.');
   }
 
-  // Successful login - redirect to home page
+  // Successful login
   return getResponse('success', 'Login successful.');
 }) satisfies RequestHandler;
 
@@ -46,7 +44,7 @@ function checkDataIntegrity(username: string, password: string) {
 
 async function createScore(token: string) {
   const recaptcha = await fetch(RECAPTCHA_URL.replace('token', token)).then(async (res) => await res.json());
-  console.log('recaptcha:', recaptcha);
+
   // Return recaptcha score. Higher is better.
   if (!recaptcha || !recaptcha.success) return 0;
   else return recaptcha.score;
