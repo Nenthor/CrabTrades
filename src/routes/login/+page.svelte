@@ -46,7 +46,9 @@
     }
 
     // Update the message and type from the response
+    console.log(await response.text());
     console.log(response);
+    /*
     const data = await response.json();
     type = data.type;
     message = data.message;
@@ -54,8 +56,9 @@
 
     if (type === 'success') {
       // Redirect to the home page. Full reload to remove recaptcha script
-      document.location.href = '/';
     }
+    */
+    //document.location.href = '/';
   }
 
   function startCircleAnimation() {
