@@ -1,11 +1,14 @@
 <script lang="ts">
-  import { CSV_START, toStockFileString } from '$lib/AlpacaPublic';
+  import type { TimeFrame } from '$lib/Alpaca';
+  import { getHistoricalStockData, toStockFileString } from '$lib/Alpaca';
   import Navbar from '$lib/components/Navbar.svelte';
   import SimpleChart from '$lib/components/SimpleChart.svelte';
-  import type { TimeFrame } from '$lib/server/Alpaca';
   import type { ChartProps } from '$lib/types';
   import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
   import { onDestroy } from 'svelte';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
 
   /*
   const data = getHistoricalStockData(['GOOGL'], new Date('2000-01-01'), new Date('2024-02-10'), '1Min');
@@ -15,65 +18,49 @@
   */
 
   let status: 'Choosing' | 'Fetching' | 'Finished' = 'Choosing';
-  let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
+  let iterator: AsyncGenerator<AlpacaBar, void, unknown> | null = null;
   let bars: AlpacaBar[] = [];
+  let elapsed = 0;
+  const maxGraphPoints = 10_000;
+  const updateInterval = 1000; // ms
 
   onDestroy(() => {
-    if (reader) reader.cancel();
+    console.log('Destroying FetchCenter page');
+    if (iterator) iterator.return();
   });
 
   async function fetchHistoricalStock(symbol: string, startDate: Date, endDate: Date, timeframe: TimeFrame) {
     status = 'Fetching';
+    elapsed = 0;
     bars = [];
-    const response = await fetch('/api/fetchHistoricalStock', {
-      method: 'POST',
-      headers: {
-        symbol: symbol,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-        timeframe: timeframe,
-      },
-    });
 
-    if (!response.ok || response.body === null) {
-      throw new Error('Error initializing upload request.');
-    }
-
+    // Update label
     chartProps.datasets[0].label = symbol;
     chartProps = chartProps;
 
-    reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let unfinishedMsg = '';
-    while (true) {
-      const { done, value } = await reader.read();
+    // Get async iterator
+    let startTime = Date.now();
+    iterator = getHistoricalStockData(symbol, startDate, endDate, timeframe, data.alpaca.keyId, data.alpaca.secretKey);
+    let lastUpdate = Date.now();
+    for await (const bar of iterator) {
+      chartProps.xLabels.push(bar.Timestamp);
+      chartProps.datasets[0].data.push(bar.ClosePrice);
+      bars.push(bar);
 
-      if (done) {
-        console.log('Finished fetching data');
-        break;
-      }
-      const msg = decoder.decode(value);
-      const barsString = msg.split('\n');
-      for (let barString of barsString) {
-        if (barString == CSV_START || !barString) continue;
-        if (!barString.endsWith('}')) {
-          unfinishedMsg += barString;
-          continue;
-        }
-        if (!barString.startsWith('{')) {
-          if (unfinishedMsg == '') continue;
-          barString = unfinishedMsg + barString;
-          unfinishedMsg = '';
-        }
+      // Update entires and elapsed time everytime a new bar is fetched
+      bars = bars;
+      elapsed = Math.round(Date.now() - startTime);
 
-        const bar: AlpacaBar = JSON.parse(barString);
-        chartProps.xLabels.push(bar.Timestamp);
-        chartProps.datasets[0].data.push(bar.ClosePrice);
-        bars.push(bar);
+      // Update chart every updateInterval in ms
+      if (Date.now() - lastUpdate > updateInterval) {
+        lastUpdate = Date.now();
+        if (chartProps.datasets[0].data.length < maxGraphPoints) {
+          chartProps = chartProps;
+        }
       }
-      chartProps = chartProps;
     }
-    reader = null;
+    elapsed = Math.round(Date.now() - startTime);
+    chartProps = chartProps;
     status = 'Finished';
   }
 
@@ -162,12 +149,12 @@
       <button on:click={onFetchButton}>Fetch data</button>
     </div>
   {:else}
-    <h3>Status: {status} ({chartProps.xLabels.length})</h3>
-    {#if status == 'Finished' || chartProps.xLabels.length < 10_000}
+    <h3>Status: {status} ({bars.length} entries in {elapsed}ms)</h3>
+    {#if status == 'Finished' || bars.length < maxGraphPoints}
       <div class="chart">
         <SimpleChart {chartProps} />
       </div>
-    {:else if chartProps.xLabels.length >= 10_000}
+    {:else if bars.length >= maxGraphPoints}
       <p class="tooManyPoints">Too many data points to display...<br />Continuing fetching data without showing graph.</p>
     {/if}
 
