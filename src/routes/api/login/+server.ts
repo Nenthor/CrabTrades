@@ -28,6 +28,8 @@ export const POST = (async ({ request, cookies, url }) => {
     return getResponse('error', 'Invalid username or password.');
   }
 
+  console.log('login successful');
+
   // Successful login
   return getResponse('success', 'Login successful.');
 }) satisfies RequestHandler;
