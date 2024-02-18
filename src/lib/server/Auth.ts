@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = generateJWTSecret(PASSWORD);
 const expiresIn = 60 * 60 * 24 * 7; // 7 days
-export const cookieName = 'crabauth';
+export const cookieName = '__session';
 
 export interface User {
   name: string;
