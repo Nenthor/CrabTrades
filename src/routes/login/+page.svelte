@@ -46,6 +46,7 @@
     }
 
     // Update the message and type from the response
+    console.log(response);
     const data = await response.json();
     type = data.type;
     message = data.message;

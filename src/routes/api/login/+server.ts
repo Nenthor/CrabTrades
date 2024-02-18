@@ -3,8 +3,9 @@ import { loginUser } from '$lib/server/Auth';
 import { type RequestHandler } from '@sveltejs/kit';
 
 const RECAPTCHA_URL = `https://google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET}&response=token`;
+const RECAPTCHA_MINIMUM_SCORE = 0.8;
 
-export const POST = (async ({ request, cookies }) => {
+export const POST = (async ({ request, cookies, url }) => {
   const username = request.headers.get('username')?.toString().trim();
   const password = request.headers.get('password')?.toString().trim();
   const token = request.headers.get('token')?.toString().trim();
@@ -18,8 +19,7 @@ export const POST = (async ({ request, cookies }) => {
 
   // Get Recaptcha Score
   const score = await createScore(token);
-
-  if (score < 0.8) {
+  if (score < RECAPTCHA_MINIMUM_SCORE) {
     return getResponse('error', 'Recaptcha failed. Try again.');
   }
 
