@@ -3,9 +3,9 @@ import type { Cookies } from '@sveltejs/kit';
 import { createHash } from 'crypto';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = generateJWTSecret(PASSWORD);
+const JWT_SECRET = generateJWTSecret(PASSWORD); // We only have one password so we can use it as a secret
 const expiresIn = 60 * 60 * 24 * 7; // 7 days
-export const cookieName = '__session';
+export const cookieName = '__session'; // NEEEDS TO BE NAMED LIKE THIS BECAUSE FIREBASE ONLY ALLOWS THIS NAME
 
 export interface User {
   name: string;
@@ -15,7 +15,6 @@ export const defaultUser: User = { name: 'Crabuser' };
 
 export async function getUserFromCookies(cookies: Cookies): Promise<User | undefined> {
   const token = cookies.get(cookieName);
-  console.log('token', token, cookies.getAll());
   if (!token) return;
 
   try {
@@ -24,7 +23,6 @@ export async function getUserFromCookies(cookies: Cookies): Promise<User | undef
     return { name: sub.toString() };
   } catch (e) {
     cookies.delete(cookieName, { path: '/' });
-    console.error(e);
   }
 }
 

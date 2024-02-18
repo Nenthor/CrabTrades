@@ -5,7 +5,7 @@ import { type RequestHandler } from '@sveltejs/kit';
 const RECAPTCHA_URL = `https://google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET}&response=token`;
 const RECAPTCHA_MINIMUM_SCORE = 0.8;
 
-export const POST = (async ({ request, cookies, url }) => {
+export const POST = (async ({ request, cookies }) => {
   const username = request.headers.get('username')?.toString().trim();
   const password = request.headers.get('password')?.toString().trim();
   const token = request.headers.get('token')?.toString().trim();
@@ -27,8 +27,6 @@ export const POST = (async ({ request, cookies, url }) => {
   if (!success) {
     return getResponse('error', 'Invalid username or password.');
   }
-
-  console.log('login successful');
 
   // Successful login
   return getResponse('success', 'Login successful.');
