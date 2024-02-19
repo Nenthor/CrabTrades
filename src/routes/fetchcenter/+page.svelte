@@ -25,7 +25,6 @@
   const updateInterval = 1000; // ms
 
   onDestroy(() => {
-    console.log('Destroying FetchCenter page');
     if (iterator) iterator.return();
   });
 
