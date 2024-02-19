@@ -1,5 +1,5 @@
-import { CSV_START } from '$lib/AlpacaPublic';
-import { getHistoricalStockData } from '$lib/server/Alpaca';
+import { ALPACA_KEY, ALPACA_SECRET } from '$env/static/private';
+import { CSV_START, getHistoricalStockData } from '$lib/Alpaca';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const POST = (async ({ request }) => {
@@ -12,7 +12,7 @@ export const POST = (async ({ request }) => {
     return new Response('Missing required parameters', { status: 400 });
   }
 
-  const data = getHistoricalStockData(symbol, new Date(startDate), new Date(endDate), timeframe);
+  const data = getHistoricalStockData(symbol, new Date(startDate), new Date(endDate), timeframe, ALPACA_KEY, ALPACA_SECRET);
 
   const stream = new ReadableStream({
     async start(controller) {

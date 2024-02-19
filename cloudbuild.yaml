@@ -8,8 +8,8 @@ steps:
     args:
       - '-c'
       - |
-        docker build . -t ${_IMAGE_NAME} --build-arg DB_TOKEN=$$DB_TOKEN --build-arg ALPACA_KEY=$$ALPACA_KEY --build-arg ALPACA_SECRET=$$ALPACA_SECRET --build-arg BUCKET_PRIVATE_KEY=$$BUCKET_PRIVATE_KEY
-    secretEnv: ['DB_TOKEN', 'ALPACA_KEY', 'ALPACA_SECRET', 'BUCKET_PRIVATE_KEY']
+        docker build . -t ${_IMAGE_NAME} --build-arg DB_TOKEN=$$DB_TOKEN --build-arg ALPACA_KEY=$$ALPACA_KEY --build-arg ALPACA_SECRET=$$ALPACA_SECRET --build-arg BUCKET_PRIVATE_KEY=$$BUCKET_PRIVATE_KEY --build-arg RECAPTCHA_SECRET=$$RECAPTCHA_SECRET --build-arg PASSWORD=$$PASSWORD
+    secretEnv: ['DB_TOKEN', 'ALPACA_KEY', 'ALPACA_SECRET', 'BUCKET_PRIVATE_KEY', 'RECAPTCHA_SECRET', 'PASSWORD']
   # Push the container image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     id: push
@@ -42,3 +42,7 @@ availableSecrets:
       env: 'ALPACA_SECRET'
     - versionName: projects/${PROJECT_ID}/secrets/bucket-private-key/versions/latest
       env: 'BUCKET_PRIVATE_KEY'
+    - versionName: projects/${PROJECT_ID}/secrets/recaptcha-secret/versions/latest
+      env: 'RECAPTCHA_SECRET'
+    - versionName: projects/${PROJECT_ID}/secrets/password/versions/latest
+      env: 'PASSWORD'
