@@ -1,4 +1,4 @@
-import { PASSWORD } from '$env/static/private';
+import { ADMIN_TOKEN, PASSWORD } from '$env/static/private';
 import type { Cookies } from '@sveltejs/kit';
 import { createHash } from 'crypto';
 import jwt from 'jsonwebtoken';
@@ -12,6 +12,10 @@ export interface User {
 }
 
 export const defaultUser: User = { name: 'Crabuser' };
+
+export function hasAdminToken(token: string | null) {
+  return token === ADMIN_TOKEN;
+}
 
 export async function getUserFromCookies(cookies: Cookies): Promise<User | undefined> {
   const token = cookies.get(cookieName);
