@@ -49,7 +49,7 @@
 <nav bind:offsetWidth={total_width}>
   <a bind:offsetWidth={image_width} data-sveltekit-reload href={redirect} id="title">
     <div class="image_container">
-      <img alt="" src="/images/image.png" width="383" height="214" />
+      <img alt="CrabTrader" src="/images/navbar.webp" width="383" height="214" />
     </div>
   </a>
   {#if isMobileMenu}

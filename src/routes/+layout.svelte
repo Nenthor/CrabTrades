@@ -14,6 +14,8 @@
     --secondary: #3bc98f;
     --secondary-light: #5de6a6;
     --secondary-dark: #2a9f6d;
+    --success: #32cd32;
+    --error: #cd3232;
   }
 
   * {
@@ -34,6 +36,13 @@
     width: 100%;
     background-color: #161616;
     position: relative;
+  }
+
+  main {
+    margin-top: 75px;
+    width: 100%;
+    height: calc(100vh - 75px);
+    overflow-y: auto;
   }
 
   a {
@@ -75,13 +84,6 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background-image: linear-gradient(var(--secondary-dark), var(--secondary));
-  }
-
-  main {
-    margin-top: 75px;
-    width: 100%;
-    max-height: calc(100vh - 75px);
-    overflow-y: auto;
   }
 
   input {

@@ -1,26 +1,34 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import Navbar from '$lib/components/Navbar.svelte';
 </script>
 
-<body>
-  <style>
-    .center1 {
-      max-width: 258px;
-      max-height: 50px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+<Navbar />
 
-    .div {
-      margin-top: -50px;
-      margin-left: -125px;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-    }
-  </style>
+<main>
+  <div class="box">
+    <h1>{$page.status}: {$page.error?.message}</h1>
+    <img alt="Error" src="/images/error.webp" width="506" height="411" />
+  </div>
+</main>
 
-  <h1 class="div" style="font-size:30px;">
-    {$page.status}: {$page.error?.message} <img alt="" src="/images/error.png" width="50" height="50" />
-  </h1>
-</body>
+<style>
+  .box {
+    margin-top: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 10vw, 4rem);
+    color: var(--error);
+    text-align: center;
+  }
+  img {
+    width: 90%;
+    max-width: 506px;
+    height: auto;
+  }
+</style>

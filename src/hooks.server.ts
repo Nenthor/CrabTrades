@@ -1,5 +1,5 @@
 import { defaultUser, getUserFromCookies } from '$lib/server/Auth';
-import { redirect, type Handle } from '@sveltejs/kit';
+import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 
 const publicRouts = ['/'];
 const onlyNonAuthRouts = ['/login', '/api/login'];
@@ -26,3 +26,14 @@ export const handle: Handle = (async ({ event, resolve }) => {
 
   return resolve(event);
 }) satisfies Handle;
+
+// Executes when an error is thrown in a route. Ignores 404 errors
+export const handleError: HandleServerError = (async ({ error, status, message }) => {
+  if (status !== 404) {
+    console.error(error);
+  }
+
+  return {
+    message,
+  };
+}) satisfies HandleServerError;

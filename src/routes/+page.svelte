@@ -154,6 +154,7 @@
     min-width: 250px;
     width: 15%;
     height: calc(100% - 20px);
+    max-height: 175px;
     margin-bottom: 20px;
     border-radius: 10px;
     gap: 10px;
