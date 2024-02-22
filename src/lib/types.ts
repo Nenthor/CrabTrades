@@ -17,3 +17,11 @@ export interface StockData {
   close: number;
   volume: number;
 }
+
+export interface Order {
+  document: string;
+  date: string;
+  decision: string;
+  currentBudget: number;
+  currentStocksAmount: number;
+}
