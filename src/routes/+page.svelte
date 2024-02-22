@@ -27,38 +27,33 @@
 <main>
   <div class="hero">
     <div class="title">
-      <div class="titlebox">
-        <h1>CrabTrades</h1>
-        <p>AI powered stock trading bot - Our first semester project</p>
-        <a href="/#explore">Explore More</a>
-      </div>
+      <h1>CrabTrades</h1>
+      <p>AI powered stock trading bot - Our first semester project</p>
+      <a href="/#explore">Explore More</a>
     </div>
-    <img src="/images/crabtrader.webp" alt="CrabTrader" class="crabtrader" />
+    <img src="/images/crabtrader.webp" alt="CrabTrader" class="crabtrader" width="1024" height="1024" />
     <div class="stats">
       <div class="stat">
         <p class="statName">Assets value</p>
-        <div class="statRedBox">
-          <p class="statValue">$100,000</p>
-        </div>
+        <p class="statValue">$100,000</p>
+        <img src="/images/svg/dollar-sign.svg" alt="dollar-sign" class="statImage" />
       </div>
       <div class="stat">
         <p class="statName">Orders</p>
-        <div class="statRedBox">
-          <p class="statValue">153</p>
-        </div>
+        <p class="statValue">153</p>
+        <img src="/images/svg/scroll.svg" alt="scroll" class="statImage" />
       </div>
       <div class="stat">
         <p class="statName">Winning trades</p>
-        <div class="statRedBox">
-          <p class="statValue">10%</p>
-        </div>
+        <p class="statValue">10%</p>
+        <img src="/images/svg/percent.svg" alt="percent" class="statImage" />
       </div>
       <div class="stat">
         <p class="statName">Uptime</p>
-        <div class="statRedBox">
-          <p class="statValue">10d</p>
-        </div>
+        <p class="statValue">10d</p>
+        <img src="/images/svg/clock.svg" alt="clock" class="statImage" />
       </div>
+      <div class="crabtrader-mobile" />
     </div>
   </div>
 </main>
@@ -78,7 +73,7 @@
     height: calc(100vh - 75px);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 90% 10%;
+    grid-template-rows: calc(100% - 100px) 100px;
     gap: 0;
   }
 
@@ -86,15 +81,13 @@
     grid-area: 1 / 1 / 2 / 2;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
+    flex-direction: column;
+    margin: 0 75px;
+    z-index: 2;
   }
 
-  .titlebox {
-    width: 100%;
-    margin: 0 50px;
-  }
-
-  .titlebox > h1 {
+  .title > h1 {
     font-size: 3.5rem;
     font-weight: 800;
     letter-spacing: 10px;
@@ -103,11 +96,11 @@
     text-transform: uppercase;
   }
 
-  .titlebox > p {
+  .title > p {
     font-size: 1.4rem;
   }
 
-  .titlebox > a {
+  .title > a {
     display: inline-block;
     padding: 12px 75px;
     background-color: var(--primary);
@@ -119,71 +112,136 @@
     font-weight: bold;
   }
 
-  .titlebox > a:hover {
+  .title > a:hover {
     background-color: var(--primary-dark);
   }
 
   .crabtrader {
     position: relative;
     grid-area: 1 / 2 / 2 / 3;
-    height: 100%;
-    margin-top: 15px;
-    margin-right: 15px;
+    aspect-ratio: 1 / 1;
+    max-height: 100%;
+    max-width: 50vw;
+    width: auto;
+    margin-top: 20px;
+    margin-right: 20px;
     border-radius: 40px;
     justify-self: end;
     box-shadow: 12px 30px 80px 0px #000c;
   }
 
+  .crabtrader-mobile {
+    display: none;
+  }
+
   .stats {
     grid-area: 2 / 1 / 3 / 3;
     background-image: linear-gradient(to bottom, #0000 0%, #111a 50%, #0000 100%);
+    transform: translateY(-75px);
     z-index: 1;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    transform: translateY(-50%);
-    height: 200%;
+    justify-content: space-evenly;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 0 20px;
   }
 
   .stat {
+    background-color: var(--secondary);
+    height: 150px;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 280px;
+    max-width: 400px;
+    border-radius: 10px;
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    background-color: white;
-    min-width: 250px;
-    width: 15%;
-    height: calc(100% - 20px);
-    max-height: 175px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    gap: 10px;
+    justify-content: center;
+    align-items: start;
+    box-shadow: 12px 30px 80px 0px #000c;
+  }
+
+  .stat:first-child > img {
+    transform: translateX(20px);
   }
 
   .statName {
-    flex-grow: 1;
-    transform: translateY(50%);
     font-size: 1.5rem;
+    margin: 10px;
     text-align: center;
-    font-weight: bold;
-    color: #161616;
-  }
-
-  .statRedBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: linear-gradient(to bottom right, var(--secondary-dark) 0%, var(--secondary) 50%, var(--secondary-dark) 100%);
-    width: calc(100% - 10px);
-    text-align: center;
-    padding: 15px 0;
-    border-radius: 0 0 10px 10px;
-    border: 5px solid white;
+    width: calc(100% - 100px);
   }
 
   .statValue {
     font-size: 2.5rem;
     font-weight: bold;
-    color: white;
+    margin: 0 10px 10px 10px;
+    text-align: center;
+    width: calc(100% - 100px);
+  }
+
+  .statImage {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    margin: 0 10px 10px 0;
+    opacity: 0.3;
+  }
+
+  @media (max-width: 1350px) {
+    .hero {
+      grid-template-rows: 40% 60%;
+    }
+
+    .title {
+      text-align: center;
+      margin: 0;
+      align-items: center;
+      grid-area: 1 / 1 / 2 / 3;
+    }
+
+    .crabtrader {
+      display: none;
+    }
+
+    .crabtrader-mobile {
+      aspect-ratio: 1 / 1;
+      position: absolute;
+      z-index: -1;
+      display: block;
+      background-image: url('/images/crabtrader.webp');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      box-shadow: 0 0 5px 30px #161616 inset;
+      border-radius: 50%;
+      max-width: 100%;
+      height: 100%;
+    }
+
+    .stats {
+      transform: translateY(0);
+      background-image: none;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .stat {
+      min-width: calc(50vw - 40px);
+      flex-basis: 50%;
+    }
+
+    .title > h1 {
+      font-size: clamp(1.7rem, 9vw, 3.5rem);
+    }
+
+    .title > p {
+      margin: 0 10px;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+    }
   }
 </style>
