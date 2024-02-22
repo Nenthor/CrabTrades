@@ -18,10 +18,12 @@ export async function getTest() {
 */
 
 export async function writeDB(order: Order) {
-  console.log('execute writeDB');
-  const docRef = crabbase.collection('DataStuff').doc(order.document);
+  if (order.document == '123' && (order.decision == 'true' || order.decision == 'false')) {
+    console.log('execute writeDB');
+    const docRef = crabbase.collection('DataStuff').doc(order.document);
 
-  await docRef.set(order);
+    await docRef.set(order);
+  }
 }
 
 export async function readDB() {
