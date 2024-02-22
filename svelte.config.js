@@ -16,8 +16,9 @@ const config = {
       mode: 'auto',
       directives: {
         'default-src': ['self', 'crabtrades.com:*', '*.crabtrades.com:*'],
-        'script-src': ['self'],
-        'connect-src': ['self'],
+        'script-src': ['self', 'www.google.com', 'www.gstatic.com'],
+        'frame-src': ['self', 'www.google.com'],
+        'connect-src': ['self', 'data.alpaca.markets'],
         'img-src': ['self'],
         'style-src': ['self', 'unsafe-inline'],
         'frame-ancestors': ['self'],

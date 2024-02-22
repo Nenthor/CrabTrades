@@ -1,11 +1,29 @@
 <script lang="ts">
+  import { invalidateAll } from '$app/navigation';
   import Navbar from '$lib/components/Navbar.svelte';
   import ChartFromTable from '../lib/components/ChartFromTable.svelte';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+
+  async function logout() {
+    const req = await fetch('/api/logout', { method: 'POST' });
+    if (req.ok) {
+      invalidateAll(); // Reload the page
+    }
+  }
 </script>
 
 <Navbar>
-  <li><a href="/fetchcenter">FetchCenter</a></li>
+  {#if data.isAuthanticated}
+    <li><a href="/fetchcenter">FetchCenter</a></li>
+  {/if}
   <li><a href="/about">About</a></li>
+  {#if data.isAuthanticated}
+    <li><a href="/logout" on:click|preventDefault={logout}>Logout</a></li>
+  {:else}
+    <li><a href="/login">Login</a></li>
+  {/if}
 </Navbar>
 
 <main>
