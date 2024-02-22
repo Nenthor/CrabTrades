@@ -1,5 +1,14 @@
 <script lang="ts">
   import Navbar from '$lib/components/Navbar.svelte';
+  //import Crabbase from '$lib/server/Crabbase.ts';
+
+  function testWrite() {
+    alert('write complete');
+  }
+
+  function testRead() {
+    alert('read complete');
+  }
 </script>
 
 <div class="container">
@@ -17,6 +26,10 @@
     width="200"
     height="150" />
 </div>
+
+<button on:click={testWrite}>test write</button>
+
+<button on:click={testRead}>test read</button>
 
 <style>
   .div {
