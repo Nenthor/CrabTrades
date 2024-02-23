@@ -19,9 +19,9 @@ export interface StockData {
 }
 
 export interface Order {
-  document: string;
+  symbol: string;
   date: string;
   decision: string;
-  currentBudget: number;
-  currentStocksAmount: number;
+  portfolioValue: number;
+  quantity: number;
 }

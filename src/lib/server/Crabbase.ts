@@ -10,20 +10,13 @@ export async function getTest() {
     first: 'john',
     last: 'johnson',
     born: 22222,
-
-  
   });
-
 }
 */
 
 export async function writeDB(order: Order) {
-  if (order.document == '123' && (order.decision == 'true' || order.decision == 'false')) {
-    console.log('execute writeDB');
-    const docRef = crabbase.collection('DataStuff').doc(order.document);
-
-    await docRef.set(order);
-  }
+  const docRef = crabbase.collection('DataStuff').doc(order.date);
+  await docRef.set(order);
 }
 
 export async function readDB() {
