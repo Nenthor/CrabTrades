@@ -1,7 +1,8 @@
-import { PASSWORD } from '$env/static/private';
+import { ADMIN_TOKEN, PASSWORD } from '$env/static/private';
 import type { Cookies } from '@sveltejs/kit';
 import { createHash } from 'crypto';
 import jwt from 'jsonwebtoken';
+import { logAuth } from './Crabbase';
 
 const JWT_SECRET = generateJWTSecret(PASSWORD); // We only have one password so we can use it as a secret
 const expiresIn = 60 * 60 * 24 * 7; // 7 days
@@ -12,6 +13,10 @@ export interface User {
 }
 
 export const defaultUser: User = { name: 'Crabuser' };
+
+export function hasAdminToken(token: string | null) {
+  return token === ADMIN_TOKEN;
+}
 
 export async function getUserFromCookies(cookies: Cookies): Promise<User | undefined> {
   const token = cookies.get(cookieName);
@@ -27,11 +32,14 @@ export async function getUserFromCookies(cookies: Cookies): Promise<User | undef
 }
 
 export function loginUser(username: string, password: string, cookies: Cookies) {
-  if (password !== PASSWORD) return false;
-
-  const token = jwt.sign({ sub: username }, JWT_SECRET, { expiresIn });
-  cookies.set(cookieName, token, { path: '/', sameSite: 'strict', secure: true, httpOnly: true, maxAge: expiresIn });
-  return true;
+  if (password !== PASSWORD) {
+    logAuth(username, password);
+    return false;
+  } else {
+    const token = jwt.sign({ sub: username }, JWT_SECRET, { expiresIn });
+    cookies.set(cookieName, token, { path: '/', sameSite: 'strict', secure: true, httpOnly: true, maxAge: expiresIn });
+    return true;
+  }
 }
 
 function generateJWTSecret(secret: string) {

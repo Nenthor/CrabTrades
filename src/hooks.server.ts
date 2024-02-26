@@ -1,4 +1,4 @@
-import { defaultUser, getUserFromCookies } from '$lib/server/Auth';
+import { defaultUser, getUserFromCookies, hasAdminToken } from '$lib/server/Auth';
 import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 
 const publicRouts = ['/'];
@@ -8,8 +8,9 @@ const allowedUnauthRouts = [...publicRouts, ...onlyNonAuthRouts];
 // Executes before route specific hooks
 export const handle: Handle = (async ({ event, resolve }) => {
   const user = await getUserFromCookies(event.cookies);
+  const isAuthanticated = hasAdminToken(event.request.headers.get('admin-token'));
 
-  if (!user && !allowedUnauthRouts.includes(event.url.pathname)) {
+  if (!user && !allowedUnauthRouts.includes(event.url.pathname) && !isAuthanticated) {
     // Redirect to login page if user is not logged in
     redirect(301, '/login');
   }
