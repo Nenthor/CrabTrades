@@ -1,4 +1,4 @@
-import { writeDB } from '$lib/server/Crabbase';
+import { writeOrder } from '$lib/server/Crabbase';
 import type { Order } from '$lib/types';
 import type { RequestHandler } from '@sveltejs/kit';
 
@@ -21,7 +21,7 @@ export const POST = (async ({ request }) => {
       quantity: isNaN(quantity) ? -1 : quantity,
     };
 
-    var success = await writeDB(order);
+    var success = await writeOrder(order);
 
     if (success) {
       return new Response(JSON.stringify({ type: 'success', message: 'Wrote order to firestore database' }), {

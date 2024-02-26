@@ -1,3 +1,5 @@
+import type { Cookies } from '@sveltejs/kit';
+
 export interface ChartProps {
   xLabels: string[];
   datasets: {
@@ -30,4 +32,11 @@ export interface Statics {
   text: string;
   stuff: string;
   value: number;
+}
+
+export interface Auth {
+  state: string;
+  username: string;
+  password: string;
+  cookies: Cookies;
 }

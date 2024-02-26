@@ -1,4 +1,4 @@
-import type { Order, Statics } from '$lib/types';
+import type { Auth, Order, Statics } from '$lib/types';
 import { crabbase } from './FirestoreApp';
 
 /*
@@ -17,7 +17,7 @@ export async function getTest() {
 }
 */
 
-export async function writeDB(order: Order) {
+export async function writeOrder(order: Order) {
   const regexp: RegExp = /[()]/gi;
   const regexp2: RegExp = /[/]/gi;
 
@@ -29,7 +29,7 @@ export async function writeDB(order: Order) {
     (order.decision == 'BUY' || order.decision == 'SELL')
   ) {
     //check for brackets
-    console.log('execute writeDB');
+    console.log('execute writeOrder');
     const docRef = crabbase.collection('DataStuff').doc(order.date);
     await docRef.set(order);
 
@@ -41,6 +41,14 @@ export async function writeDB(order: Order) {
   } else {
     return false;
   }
+}
+
+export async function logAuth(auth: Auth) {
+  //check for brackets
+  var date = new Date();
+  console.log('logging auth');
+  const docRef = crabbase.collection('Auth').doc(date.toString());
+  await docRef.set(auth);
 }
 
 export async function writeStatic(statics: Statics) {
