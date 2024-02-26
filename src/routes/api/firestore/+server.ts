@@ -21,9 +21,14 @@ export const POST = (async ({ request }) => {
       quantity: isNaN(quantity) ? -1 : quantity,
     };
 
-    await writeDB(order);
+    var success = await writeDB(order);
 
-    return new Response(JSON.stringify({ type: 'success', message: 'Wrote order to firestore database' }), {
+    if (success) {
+      return new Response(JSON.stringify({ type: 'success', message: 'Wrote order to firestore database' }), {
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+    return new Response(JSON.stringify({ type: 'error', message: 'ERROR: write order to firestore database FAILED' }), {
       headers: { 'content-type': 'application/json' },
     });
   }

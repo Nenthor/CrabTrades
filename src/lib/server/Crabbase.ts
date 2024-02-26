@@ -36,6 +36,10 @@ export async function writeDB(order: Order) {
     console.log('execute write on curent'); // write on current
     const docRef2 = crabbase.collection('current').doc('currentDate');
     await docRef2.set(order);
+
+    return true;
+  } else {
+    return false;
   }
 }
 
