@@ -16,5 +16,5 @@ const credential: any = {
   universe_domain: 'googleapis.com',
 };
 
-const app = initializeApp({ projectId: 'crabtrades', credential: cert(credential) });
-export const crabbase = getFirestore(app, 'crabbase');
+const app = initializeApp({ credential: cert(credential) });
+export const crabbase = getFirestore(app);

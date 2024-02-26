@@ -1,4 +1,4 @@
-import type { Order } from '$lib/types';
+import type { Auth, Order, Statics } from '$lib/types';
 import { crabbase } from './FirestoreApp';
 
 /*
@@ -17,17 +17,65 @@ export async function getTest() {
 }
 */
 
-export async function writeDB(order: Order) {
-  if (order.document == '123' && (order.decision == 'true' || order.decision == 'false')) {
-    console.log('execute writeDB');
-    const docRef = crabbase.collection('DataStuff').doc(order.document);
+export async function writeOrder(order: Order) {
+  const regexp: RegExp = /[()]/gi;
+  const regexp2: RegExp = /[/]/gi;
 
+  if (
+    !regexp.test(order.symbol) &&
+    !regexp2.test(order.symbol) &&
+    !regexp.test(order.date) &&
+    !regexp2.test(order.date) &&
+    (order.decision == 'BUY' || order.decision == 'SELL')
+  ) {
+    //check for brackets
+    console.log('execute writeOrder');
+    const docRef = crabbase.collection('DataStuff').doc(order.date);
     await docRef.set(order);
+
+    console.log('execute write on curent'); // write on current
+    const docRef2 = crabbase.collection('current').doc('currentDate');
+    await docRef2.set(order);
+
+    return true;
+  } else {
+    return false;
   }
+}
+
+export async function logAuth(username: string, password: string) {
+  //check for brackets
+
+  const auth: Auth = { username, password };
+  var date = new Date();
+  console.log('logging auth');
+  const docRef = crabbase.collection('Auth').doc(date.toISOString());
+  await docRef.set(auth);
+}
+
+export async function writeStatic(statics: Statics) {
+  console.log('write Static'); // write on current
+  const docRef2 = crabbase.collection('current').doc('Static');
+  await docRef2.set(statics);
 }
 
 export async function readDB() {
   const snapshot = await crabbase.collection('DataStuff').get();
+
+  const arr: Order[] = [];
+
+  snapshot.forEach((doc: any) => {
+    //    console.log(/*doc.id, '=>',*/ doc.data());
+    const d: Order = doc.data();
+    arr.push(d);
+    //    console.log(d.date)
+  });
+  return arr;
+}
+
+export async function readCurrent() {
+  //array value 1 is recent, array value 0 is statics
+  const snapshot = await crabbase.collection('current').get();
 
   const arr: Order[] = [];
 
