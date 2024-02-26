@@ -25,3 +25,9 @@ export interface Order {
   portfolioValue: number;
   quantity: number;
 }
+
+export interface Statics {
+  text: string;
+  stuff: string;
+  value: number;
+}
