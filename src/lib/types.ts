@@ -35,8 +35,6 @@ export interface Statics {
 }
 
 export interface Auth {
-  state: string;
   username: string;
   password: string;
-  cookies: Cookies;
 }

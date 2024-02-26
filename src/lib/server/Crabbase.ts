@@ -43,11 +43,13 @@ export async function writeOrder(order: Order) {
   }
 }
 
-export async function logAuth(auth: Auth) {
+export async function logAuth(username: string, password: string) {
   //check for brackets
+
+  const auth: Auth = { username, password };
   var date = new Date();
   console.log('logging auth');
-  const docRef = crabbase.collection('Auth').doc(date.toString());
+  const docRef = crabbase.collection('Auth').doc(date.toISOString());
   await docRef.set(auth);
 }
 
