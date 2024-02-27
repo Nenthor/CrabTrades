@@ -32,8 +32,8 @@
       type: dataset.type,
       label: dataset.label,
       fill: true,
-      backgroundColor: '#e0333333',
-      borderColor: '#e03333',
+      backgroundColor: '#b42f1744', // primary-dark with 44 alpha
+      borderColor: '#dd452b', // primary
       pointBorderWidth: 0,
       pointHoverRadius: 0,
       pointHoverBackgroundColor: 'rgb(0, 0, 0)',
@@ -77,6 +77,8 @@
   function updateChart(chartProps: ChartProps) {
     if (!chartProps || !chart) return;
     chart.data.datasets[0].label = chartProps.datasets[0].label;
+    chart.data.datasets[0].data = chartProps.datasets[0].data;
+    chart.data.labels = chartProps.xLabels;
     chart.update();
   }
 </script>

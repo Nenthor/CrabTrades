@@ -1,5 +1,7 @@
 <script lang="ts">
   import { invalidateAll } from '$app/navigation';
+  import HomepageAbout from '$lib/components/HomepageAbout.svelte';
+  import HomepageChart from '$lib/components/HomepageChart.svelte';
   import HomepageHero from '$lib/components/HomepageHero.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import type { PageData } from './$types';
@@ -29,14 +31,13 @@
 
 <main>
   <HomepageHero {homepageStats} />
+  <HomepageChart />
+  <HomepageAbout />
 </main>
 
 <style>
   main {
     margin-top: 75px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 </style>

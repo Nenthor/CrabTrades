@@ -30,8 +30,6 @@
   }
 
   body {
-    display: flex;
-    flex-direction: column;
     min-height: 100%;
     width: 100%;
     background-color: #161616;
@@ -43,6 +41,7 @@
     width: 100%;
     height: calc(100vh - 75px);
     overflow-y: auto;
+    scroll-behavior: smooth;
   }
 
   a {
@@ -79,11 +78,11 @@
 
   ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-image: linear-gradient(var(--secondary-dark), var(--secondary-light));
+    background-image: linear-gradient(var(--primary-dark), var(--primary-light));
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background-image: linear-gradient(var(--secondary-dark), var(--secondary));
+    background-image: linear-gradient(var(--primary-dark), var(--primary));
   }
 
   input {
@@ -107,5 +106,11 @@
     font-size: large;
     border: none;
     cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    main {
+      scroll-behavior: auto !important;
+    }
   }
 </style>

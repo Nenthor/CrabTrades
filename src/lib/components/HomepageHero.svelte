@@ -66,7 +66,7 @@
   <div class="title">
     <h1>CrabTrades</h1>
     <p>AI powered stock trading bot - Our first semester project</p>
-    <a href="/#explore">Explore More</a>
+    <a href="#chart">Explore More</a>
   </div>
   <img src="/images/crabtrader.webp" alt="CrabTrader" class="crabtrader" width="1024" height="1024" />
   <div class="stats">
@@ -98,11 +98,12 @@
   .hero {
     position: relative;
     width: 100%;
-    height: calc(100vh - 75px);
+    min-height: calc(100vh - 75px);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: calc(100% - 100px) 100px;
     gap: 0;
+    margin-bottom: 20px;
   }
 
   .title {
@@ -148,7 +149,7 @@
     position: relative;
     grid-area: 1 / 2 / 2 / 3;
     aspect-ratio: 1 / 1;
-    max-height: 100%;
+    max-height: calc(100vh - 200px);
     max-width: 50vw;
     width: auto;
     margin-top: 20px;
@@ -220,7 +221,7 @@
     opacity: 0.3;
   }
 
-  @media (max-width: 1350px) {
+  @media (max-width: 1350px) or (max-height: 650px) {
     .hero {
       grid-template-rows: 40% 60%;
     }
