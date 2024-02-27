@@ -115,7 +115,7 @@
 
 <Navbar />
 
-<div class="container">
+<main>
   <h1 class="title">FetchCenter</h1>
   {#if status == 'Choosing'}
     <div class="select">
@@ -164,16 +164,17 @@
       </ul>
     {/if}
   {/if}
-</div>
+</main>
 
 <style>
-  .container {
+  main {
     display: flex;
     align-items: center;
     flex-direction: column;
   }
 
   .title {
+    color: var(--primary);
     margin: 20px 0;
     font-size: 3rem;
   }

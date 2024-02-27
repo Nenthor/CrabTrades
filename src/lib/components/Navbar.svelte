@@ -4,7 +4,7 @@
 
   export let addHomeLink = true;
 
-  const MARGIN = 10;
+  const MARGIN = 50;
   const MOBILE_FLY_TRANSITION = 1000;
   let isOpen = false;
   let is_loading = true;
@@ -49,7 +49,7 @@
 <nav bind:offsetWidth={total_width}>
   <a bind:offsetWidth={image_width} data-sveltekit-reload href={redirect} id="title">
     <div class="image_container">
-      <img alt="" src="/images/image.png" width="383" height="214" />
+      <img alt="CrabTrader" src="/images/navbar.webp" width="383" height="214" />
     </div>
   </a>
   {#if isMobileMenu}
@@ -221,7 +221,7 @@
   }
 
   :global(#nav_list > li > a:hover) {
-    color: var(--crabred);
+    color: var(--primary);
     text-shadow: none;
   }
 
@@ -242,7 +242,7 @@
   }
 
   :global(#nav_list_open > li > a:hover) {
-    color: var(--crabred);
+    color: var(--primary);
     text-shadow: none;
   }
 </style>
