@@ -211,45 +211,45 @@
   }
 
   :global(.leftToVoid) {
-    animation: 0.75s linear 0s 1 normal forwards running leftToVoid;
+    animation: 0.75s ease-in-out 0s 1 normal forwards running leftToVoid;
   }
 
   :global(.middleToLeft) {
-    animation: 0.75s linear 0s 1 normal forwards running middleToLeft;
+    animation: 0.75s ease-in-out 0s 1 normal forwards running middleToLeft;
   }
 
   :global(.rightToMiddle) {
-    animation: 0.75s linear 0s 1 normal forwards running rightToMiddle;
+    animation: 0.75s ease-in-out 0s 1 normal forwards running rightToMiddle;
   }
 
   :global(.rightToMiddle::after) {
-    transition: opacity 0.5s linear;
+    transition: opacity 0.5s ease-in-out;
     opacity: 0 !important;
   }
 
   :global(.voidToRight) {
-    animation: 0.75s linear 0s 1 normal forwards running voidToRight;
+    animation: 0.75s ease-in-out 0s 1 normal forwards running voidToRight;
   }
 
   :global(.voidToLeft) {
-    animation: 0.75s linear 0s 1 reverse forwards running leftToVoid;
+    animation: 0.75s ease-in-out 0s 1 reverse forwards running leftToVoid;
   }
 
   :global(.leftToMiddle) {
-    animation: 0.75s linear 0s 1 reverse forwards running middleToLeft;
+    animation: 0.75s ease-in-out 0s 1 reverse forwards running middleToLeft;
   }
 
   :global(.leftToMiddle::after) {
-    transition: opacity 0.5s linear;
+    transition: opacity 0.5s ease-in-out;
     opacity: 0 !important;
   }
 
   :global(.middleToRight) {
-    animation: 0.75s linear 0s 1 reverse forwards running rightToMiddle;
+    animation: 0.75s ease-in-out 0s 1 reverse forwards running rightToMiddle;
   }
 
   :global(.rightToVoid) {
-    animation: 0.75s linear 0s 1 reverse forwards running voidToRight;
+    animation: 0.75s ease-in-out 0s 1 reverse forwards running voidToRight;
   }
 
   @keyframes arrowFadeIn {
