@@ -2,6 +2,8 @@
   import type { ChartProps } from '$lib/types';
   import SimpleChart from './SimpleChart.svelte';
 
+  const DURATION = 0.75; // s
+
   let chartProps1: ChartProps = {
     xLabels: [
       new Date('2020-01-01').toISOString(),
@@ -36,20 +38,60 @@
     ],
   };
 
-  let charts: ChartProps[] = [chartProps2, chartProps1, chartProps2, chartProps2];
-
+  let charts: ChartProps[] = [chartProps2, chartProps1, chartProps2, chartProps1];
+  let isAnimating = false;
   function onChartClick(index: number) {
-    if (index === 1) return;
+    if (index === 1 || isAnimating) return;
+    isAnimating = true;
+
+    // Animate the charts
+    const chart0 = document.getElementById('chart0');
+    const chart1 = document.getElementById('chart1');
+    const chart2 = document.getElementById('chart2');
+    const chart3 = document.getElementById('chart3');
+    const chartLast = document.getElementById(`chart${charts.length - 1}`);
 
     if (index === 0) {
-      const first = charts.splice(0, 1)[0];
-      if (first) charts.push(first);
+      chart0?.classList.add('leftToVoid');
+      chart1?.classList.add('middleToLeft');
+      chart2?.classList.add('rightToMiddle');
+      chart3?.classList.add('voidToRight');
+      if (chart3) chart3.style.display = 'inline';
     } else if (index === 2) {
-      const last = charts.splice(charts.length - 1, 1)[0];
-      if (last) charts.unshift(last);
+      chartLast?.classList.add('voidToLeft');
+      chart0?.classList.add('leftToMiddle');
+      chart1?.classList.add('middleToRight');
+      chart2?.classList.add('rightToVoid');
+      if (chartLast) chartLast.style.display = 'inline';
     }
 
-    charts = charts;
+    setTimeout(() => {
+      // Remove the animation classes
+      if (index === 0) {
+        chart0?.classList.remove('leftToVoid');
+        chart1?.classList.remove('middleToLeft');
+        chart2?.classList.remove('rightToMiddle');
+        chart3?.classList.remove('voidToRight');
+        if (chart3) chart3.style.display = 'none';
+      } else if (index === 2) {
+        chartLast?.classList.remove('voidToLeft');
+        chart0?.classList.remove('leftToMiddle');
+        chart1?.classList.remove('middleToRight');
+        chart2?.classList.remove('rightToVoid');
+        if (chartLast) chartLast.style.display = 'none';
+      }
+
+      // Update the charts array
+      if (index === 0) {
+        const first = charts.shift();
+        if (first) charts.push(first);
+      } else if (index === 2) {
+        const last = charts.pop();
+        if (last) charts.unshift(last);
+      }
+      charts = charts;
+      isAnimating = false;
+    }, DURATION * 1000);
   }
 </script>
 
@@ -57,7 +99,7 @@
   <h2 class="title">AI trading history</h2>
   <ul class="charts">
     {#each charts as chart, index}
-      <button on:click={() => onChartClick(index)} class="chart">
+      <button on:click={() => onChartClick(index)} id="chart{index}" class="chart">
         <SimpleChart chartProps={chart} />
       </button>
     {/each}
@@ -90,14 +132,16 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     transform: translateY(-75px);
+    text-align: center;
   }
 
   .charts {
     position: relative;
     gap: 30px;
-    padding: 30px;
+    padding: 0 30px 0px 30px;
     height: 500px;
     width: calc(100% - 60px);
+    transform: translateY(-30px);
   }
 
   .chart {
@@ -116,14 +160,18 @@
     left: 50%;
   }
 
-  .chart:nth-child(1) {
+  #chart0 {
     display: inline;
     transform: translate(-50%, -50%) translateX(-730px) perspective(50em) rotateY(-45deg) scale(0.72) translateX(75px);
     z-index: 1;
   }
 
-  .chart:nth-child(1)::after,
-  .chart:nth-child(3)::after {
+  #chart0::after,
+  #chart2::after,
+  :global(.voidToLeft::after),
+  :global(.voidToRight::after),
+  :global(.middleToLeft::after),
+  :global(.middleToRight::after) {
     content: '';
     position: absolute;
     width: 200px;
@@ -138,20 +186,118 @@
     background-position: center;
   }
 
-  .chart:nth-child(2) {
+  #chart1 {
     display: inline;
     transform: translate(-50%, -50%);
     z-index: 2;
     cursor: auto;
   }
 
-  .chart:nth-child(3) {
+  #chart2 {
     display: inline;
     transform: translate(-50%, -50%) translateX(730px) perspective(50em) rotateY(45deg) scale(0.72) translateX(-75px);
     z-index: 1;
   }
 
-  .chart:nth-child(3)::after {
+  #chart2::after,
+  :global(.voidToRight::after),
+  :global(.middleToRight::after) {
     transform: translate(-50%, -50%) rotateY(180deg) !important;
+  }
+
+  :global(.middleToLeft::after),
+  :global(.middleToRight::after) {
+    animation: arrowFadeIn 0.5s ease-in 0s 1 normal forwards;
+  }
+
+  :global(.leftToVoid) {
+    animation: 0.75s linear 0s 1 normal forwards running leftToVoid;
+  }
+
+  :global(.middleToLeft) {
+    animation: 0.75s linear 0s 1 normal forwards running middleToLeft;
+  }
+
+  :global(.rightToMiddle) {
+    animation: 0.75s linear 0s 1 normal forwards running rightToMiddle;
+  }
+
+  :global(.rightToMiddle::after) {
+    transition: opacity 0.5s linear;
+    opacity: 0 !important;
+  }
+
+  :global(.voidToRight) {
+    animation: 0.75s linear 0s 1 normal forwards running voidToRight;
+  }
+
+  :global(.voidToLeft) {
+    animation: 0.75s linear 0s 1 reverse forwards running leftToVoid;
+  }
+
+  :global(.leftToMiddle) {
+    animation: 0.75s linear 0s 1 reverse forwards running middleToLeft;
+  }
+
+  :global(.leftToMiddle::after) {
+    transition: opacity 0.5s linear;
+    opacity: 0 !important;
+  }
+
+  :global(.middleToRight) {
+    animation: 0.75s linear 0s 1 reverse forwards running rightToMiddle;
+  }
+
+  :global(.rightToVoid) {
+    animation: 0.75s linear 0s 1 reverse forwards running voidToRight;
+  }
+
+  @keyframes arrowFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes leftToVoid {
+    from {
+      transform: translate(-50%, -50%) translateX(-730px) perspective(50em) rotateY(-45deg) scale(0.72) translateX(75px);
+      opacity: 1;
+    }
+    to {
+      transform: translate(-50%, -50%) translateX(-830px) perspective(50em) rotateY(-90deg) scale(0.72) translateX(75px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes middleToLeft {
+    from {
+      transform: translate(-50%, -50%);
+    }
+    to {
+      transform: translate(-50%, -50%) translateX(-730px) perspective(50em) rotateY(-45deg) scale(0.72) translateX(75px);
+    }
+  }
+
+  @keyframes rightToMiddle {
+    from {
+      transform: translate(-50%, -50%) translateX(730px) perspective(50em) rotateY(45deg) scale(0.72) translateX(-75px);
+    }
+    to {
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  @keyframes voidToRight {
+    from {
+      transform: translate(-50%, -50%) translateX(830px) perspective(50em) rotateY(90deg) scale(0.72) translateX(-75px);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, -50%) translateX(730px) perspective(50em) rotateY(45deg) scale(0.72) translateX(-75px);
+      opacity: 1;
+    }
   }
 </style>
