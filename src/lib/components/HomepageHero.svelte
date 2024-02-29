@@ -139,6 +139,7 @@
     border-radius: 50px;
     transition: background-color 0.2s;
     font-weight: bold;
+    animation: pulse 2s ease-in-out infinite;
   }
 
   .title > a:hover {
@@ -303,6 +304,18 @@
   @media (hover: none) {
     .title > a:hover {
       background-color: var(--primary);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.025);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 </style>
