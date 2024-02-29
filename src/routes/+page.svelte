@@ -19,13 +19,13 @@
 </script>
 
 <Navbar>
+  <li><a href="#charts">AI Trading History</a></li>
+  <li><a href="#about">About</a></li>
   {#if data.isAuthanticated}
-    <li><a href="/fetchcenter">FetchCenter</a></li>
+    <li><a href="/admin">Admin</a></li>
   {/if}
   {#if data.isAuthanticated}
     <li><a href="/logout" on:click|preventDefault={logout}>Logout</a></li>
-  {:else}
-    <li><a href="/login">Login</a></li>
   {/if}
 </Navbar>
 

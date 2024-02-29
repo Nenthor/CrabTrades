@@ -107,7 +107,7 @@
   }
 </script>
 
-<div id="chart">
+<div id="charts">
   <h2 class="title">AI trading history</h2>
   <ul class="charts">
     {#each charts as chart, index}
@@ -127,7 +127,7 @@
 </div>
 
 <style>
-  #chart {
+  #charts {
     padding: 75px 0;
     width: 100%;
     /* From https://css-generators.com/wavy-shapes/ */

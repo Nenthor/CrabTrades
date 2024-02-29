@@ -66,7 +66,7 @@
   <div class="title">
     <h1>CrabTrades</h1>
     <p>AI powered stock trading bot - Our first semester project</p>
-    <a href="#chart">Explore More</a>
+    <a href="#charts">Explore More</a>
   </div>
   <img src="/images/crabtrader.webp" alt="CrabTrader" class="crabtrader" width="1024" height="1024" />
   <div class="stats">
