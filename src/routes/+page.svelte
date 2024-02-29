@@ -31,7 +31,7 @@
 
 <main>
   <HomepageHero {homepageStats} />
-  <HomepageChart />
+  <HomepageChart charts={homepageStats.charts} />
   <HomepageAbout />
 </main>
 

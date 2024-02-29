@@ -2,49 +2,16 @@
   import type { ChartProps } from '$lib/types';
   import SimpleChart from './SimpleChart.svelte';
 
+  export let charts: ChartProps[];
+
   const DURATION = 0.75; // s
   const DURATION_MOBILE = 0.5; // s
 
-  let chartProps1: ChartProps = {
-    xLabels: [
-      new Date('2020-01-01').toISOString(),
-      new Date('2020-02-01').toISOString(),
-      new Date('2020-03-01').toISOString(),
-      new Date('2020-04-01').toISOString(),
-      new Date('2020-05-01').toISOString(),
-    ],
-    datasets: [
-      {
-        type: 'line',
-        label: 'X',
-        data: [65, 59, 80, 81, 56, 55, 40],
-      },
-    ],
-  };
-
-  let chartProps2: ChartProps = {
-    xLabels: [
-      new Date('2020-01-01').toISOString(),
-      new Date('2020-02-01').toISOString(),
-      new Date('2020-03-01').toISOString(),
-      new Date('2020-04-01').toISOString(),
-      new Date('2020-06-01').toISOString(),
-    ],
-    datasets: [
-      {
-        type: 'line',
-        label: 'AAPL',
-        data: [42, 100, 50, 60, 40, 35, 20],
-      },
-    ],
-  };
-
-  let charts: ChartProps[] = [chartProps2, chartProps1, chartProps2, chartProps1];
   let isAnimating = false;
   function onChartClick(index: number) {
     if (index === 1 || isAnimating) return;
     isAnimating = true;
-    const isMobile = window.screen.width <= 1700;
+    const isMobile = window.innerWidth < 1700;
     const timeout = isMobile ? DURATION_MOBILE * 1000 : DURATION * 1000;
 
     // Animate the charts
@@ -192,7 +159,6 @@
   .charts {
     position: relative;
     gap: 30px;
-    padding: 0 30px 0px 30px;
     height: 500px;
     width: calc(100% - 60px);
     transform: translateY(-30px);
@@ -250,7 +216,7 @@
     width: 100%;
     height: 100%;
     transform: scale(1.2);
-    filter: invert(30%) sepia(45%) saturate(4102%) hue-rotate(351deg) brightness(95%) contrast(82%);
+    filter: invert(30%) sepia(45%) saturate(4102%) hue-rotate(351deg) brightness(95%) contrast(82%); /* primary color */
   }
   .mobile_right > img {
     transform: scale(1.2) rotate(180deg);
@@ -304,31 +270,6 @@
   :global(.voidToRight::after),
   :global(.middleToRight::after) {
     transform: translate(-50%, -50%) rotateY(180deg) !important;
-  }
-
-  @media (max-width: 1700px) {
-    #chart0,
-    #chart2 {
-      display: none;
-    }
-
-    #chart1 {
-      width: min(calc(100vw - 20px), 700px);
-    }
-
-    .mobile_buttons {
-      display: flex;
-    }
-
-    .charts {
-      height: 520px;
-      transform: translateY(-50px);
-    }
-
-    #chart0::after,
-    #chart2::after {
-      content: none;
-    }
   }
 
   :global(.middleToLeft::after),
@@ -486,6 +427,42 @@
     to {
       transform: translate(-50%, -50%) translateX(700px) perspective(50em) rotateY(45deg) scale(0.74) translateX(-75px);
       opacity: 1;
+    }
+  }
+
+  @media (hover: none) {
+    .mobile_left:hover,
+    .mobile_right:hover {
+      background-color: white;
+    }
+    .mobile_left:hover > img,
+    .mobile_right:hover > img {
+      filter: invert(30%) sepia(45%) saturate(4102%) hue-rotate(351deg) brightness(95%) contrast(82%) !important; /* primary color */
+    }
+  }
+
+  @media (max-width: 1700px) {
+    #chart0,
+    #chart2 {
+      display: none;
+    }
+
+    .chart {
+      width: min(calc(100vw - 20px), 700px);
+    }
+
+    .mobile_buttons {
+      display: flex;
+    }
+
+    .charts {
+      height: 520px;
+      transform: translateY(-50px);
+    }
+
+    #chart0::after,
+    #chart2::after {
+      content: none;
     }
   }
 </style>

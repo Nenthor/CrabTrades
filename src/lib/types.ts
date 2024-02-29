@@ -42,4 +42,5 @@ export interface HomepageStats {
   profit: number;
   orders: number;
   uptime: Date;
+  charts: ChartProps[];
 }

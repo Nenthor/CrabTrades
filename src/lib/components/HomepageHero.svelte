@@ -299,4 +299,10 @@
       height: 75px;
     }
   }
+
+  @media (hover: none) {
+    .title > a:hover {
+      background-color: var(--primary);
+    }
+  }
 </style>
