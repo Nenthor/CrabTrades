@@ -19,7 +19,7 @@ const config = {
         'script-src': ['self', 'www.google.com', 'www.gstatic.com'],
         'frame-src': ['self', 'www.google.com'],
         'connect-src': ['self', 'data.alpaca.markets'],
-        'img-src': ['self'],
+        'img-src': ['self', 'github.com', 'avatars.githubusercontent.com'],
         'style-src': ['self', 'unsafe-inline'],
         'frame-ancestors': ['self'],
         'form-action': ['self'],
