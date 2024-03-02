@@ -42,8 +42,8 @@
       text: 'Paper trading API & historical data',
     },
     {
-      name: 'PyTorch',
-      logo: '/images/svg/software/pytorch.svg',
+      name: 'TensorFlow',
+      logo: '/images/svg/software/tensorflow.svg',
       text: 'Our Stock trading AI model',
     },
     {
