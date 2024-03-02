@@ -1,14 +1,12 @@
 <script lang="ts">
   import type { TimeFrame } from '$lib/Alpaca';
   import { getHistoricalStockData, toStockFileString } from '$lib/Alpaca';
-  import Navbar from '$lib/components/Navbar.svelte';
   import SimpleChart from '$lib/components/SimpleChart.svelte';
   import type { ChartProps } from '$lib/types';
   import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
   import { onDestroy } from 'svelte';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let alpaca: { keyId: string; secretKey: string };
 
   /*
   const data = getHistoricalStockData(['GOOGL'], new Date('2000-01-01'), new Date('2024-02-10'), '1Min');
@@ -39,7 +37,7 @@
 
     // Get async iterator
     let startTime = Date.now();
-    iterator = getHistoricalStockData(symbol, startDate, endDate, timeframe, data.alpaca.keyId, data.alpaca.secretKey);
+    iterator = getHistoricalStockData(symbol, startDate, endDate, timeframe, alpaca.keyId, alpaca.secretKey);
     let lastUpdate = Date.now();
     for await (const bar of iterator) {
       chartProps.xLabels.push(bar.Timestamp);
@@ -113,10 +111,8 @@
   }
 </script>
 
-<Navbar />
-
-<main>
-  <h1 class="title">FetchCenter</h1>
+<div class="fetchcontroll">
+  <h1 class="title">FetchControll</h1>
   {#if status == 'Choosing'}
     <div class="select">
       <h2>Choose stock data</h2>
@@ -164,18 +160,18 @@
       </ul>
     {/if}
   {/if}
-</main>
+</div>
 
 <style>
-  main {
+  .fetchcontroll {
     display: flex;
     align-items: center;
     flex-direction: column;
   }
 
   .title {
-    color: var(--primary);
-    margin: 20px 0;
+    color: var(--secondary);
+    margin-bottom: 20px;
     font-size: 3rem;
   }
 

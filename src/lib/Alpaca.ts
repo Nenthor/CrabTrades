@@ -5,9 +5,11 @@ import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2
 
 export type TimeFrame = '1Min' | '15Min' | '30Min' | '1Hour' | '1Day' | '1Week';
 export const CSV_START = 'Symbol,Timestamp,Open,Close,Low,High,VWAP';
+export const INITIAL_CAPITAL = 100_000;
+export const START_DATE = new Date('2024-02-26'); // The date the AI began trading
 
-const baseUrl = 'https://data.alpaca.markets/v2/stocks';
-
+const historyUrl = 'https://data.alpaca.markets/v2/stocks';
+const accountUrl = 'https://paper-api.alpaca.markets/v2/account';
 interface RawData {
   bars: {
     c: number;
@@ -84,11 +86,12 @@ export async function* getHistoricalStockData(symbol: string, start: Date, end: 
 }
 
 async function fetchStockData(symbol: string, start: Date, end: Date, timeframe: TimeFrame, keyId: string, secretKey: string, pageToken?: string) {
-  const url = new URL(`${baseUrl}/${symbol}/bars`);
+  const url = new URL(`${historyUrl}/${symbol}/bars`);
   url.searchParams.append('start', start.toISOString());
   url.searchParams.append('end', end.toISOString());
   url.searchParams.append('timeframe', timeframe);
   url.searchParams.append('adjustment', 'split');
+  url.searchParams.append('limit', '10000'); // Max limit
   if (pageToken) url.searchParams.append('page_token', pageToken);
 
   const response = await fetch(url, {
@@ -130,4 +133,15 @@ export function toStockFileString(bars: AlpacaBar[]) {
  */
 export function toStockString(bar: AlpacaBar) {
   return `${bar.Symbol},${bar.Timestamp},${bar.OpenPrice},${bar.ClosePrice},${bar.LowPrice},${bar.HighPrice},${bar.VWAP}`;
+}
+
+export async function getPortfolioValue(keyId: string, secretKey: string) {
+  const response = await fetch(accountUrl, {
+    headers: {
+      'APCA-API-KEY-ID': keyId,
+      'APCA-API-SECRET-KEY': secretKey,
+    },
+  });
+  const data = await response.json();
+  return data.portfolio_value as number;
 }

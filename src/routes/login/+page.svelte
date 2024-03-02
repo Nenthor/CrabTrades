@@ -83,8 +83,8 @@
 
 <main>
   <form method="post" bind:this={form} on:submit|preventDefault={onSubmit}>
-    <h1>Login</h1>
-    <p>Enter your username and password for unlimited access to CrabTrades.com!</p>
+    <h1>Admin Login</h1>
+    <p>Enter your admin username and password for unlimited access to CrabTrades.com!</p>
     <div>
       <label for="username">Username:</label>
       <input bind:value={username} bind:this={autoFocusElement} id="username" type="text" required autocomplete="off" />
@@ -103,7 +103,7 @@
 
 <style>
   h1 {
-    color: var(--crabred);
+    color: var(--primary);
     text-transform: uppercase;
   }
 
