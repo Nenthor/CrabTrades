@@ -93,7 +93,7 @@ async function fetchStockData(symbol: string, start: Date, end: Date, timeframe:
   url.searchParams.append('adjustment', 'split');
   url.searchParams.append('limit', '10000'); // Max limit
   if (pageToken) url.searchParams.append('page_token', pageToken);
-
+  console.log(url.toString());
   const response = await fetch(url, {
     headers: {
       'APCA-API-KEY-ID': keyId,

@@ -3,8 +3,12 @@ export interface ChartProps {
   datasets: {
     type: 'line' | 'bubble';
     label: string;
-    data: number[];
+    data: number[] | { x: string; y: number; r: number }[];
     color?: string;
+
+    backgroundColor?: string;
+    hoverBackgroundColor?: string;
+    pointRadius?: number;
   }[];
 }
 

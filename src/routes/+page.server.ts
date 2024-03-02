@@ -1,7 +1,8 @@
 import { ALPACA_KEY, ALPACA_SECRET } from '$env/static/private';
-import { INITIAL_CAPITAL, START_DATE, getPortfolioValue } from '$lib/Alpaca';
-import { readCurrent } from '$lib/server/Crabbase';
+import { INITIAL_CAPITAL, START_DATE, getHistoricalStockDataAwait, getPortfolioValue } from '$lib/Alpaca';
+import { readCurrent, readDB } from '$lib/server/Crabbase';
 import type { ChartProps, HomepageStats } from '$lib/types';
+import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
 import type { PageServerLoad } from './$types';
 
 let homepageStats: HomepageStats;
@@ -19,8 +20,8 @@ export const load = (async ({ locals }) => {
 
 async function getHomepageStats(): Promise<HomepageStats> {
   return await new Promise(async (resolve) => {
-    let maxFetches = 2;
-    let data: HomepageStats = { assetsValue: 0, profit: 0, orders: 0, uptime: START_DATE, charts: getTestCharts() };
+    let maxFetches = 3;
+    let data: HomepageStats = { assetsValue: 0, profit: 0, orders: 0, uptime: START_DATE, charts: await getTestCharts() };
 
     readCurrent().then((o) => {
       data.orders = o.length;
@@ -37,23 +38,81 @@ async function getHomepageStats(): Promise<HomepageStats> {
         resolve(data);
       }
     });
+    getTestCharts().then((c) => {
+      data.charts = c;
+      maxFetches--;
+      if (maxFetches <= 0) {
+        resolve(data);
+      }
+    });
   });
 }
 
-function getTestCharts() {
+async function getTestCharts() {
+  const arr = await readDB();
+  const arrDate = [];
+
+  for (let index = 0; index < arr.length; index++) {
+    const element: ChartProps = {
+      datasets: [],
+      xLabels: [],
+    };
+    arrDate.push(arr[index].date);
+  }
+
+  for (let index = 0; index < arr.length; index++) {
+    const element: ChartProps = {
+      datasets: [],
+      xLabels: [],
+    };
+    arrDate.push(arr[index].date);
+  }
+
+  const lastWeek = new Date();
+  lastWeek.setDate(lastWeek.getDate() - 7);
+
+  const today = new Date();
+  today.setMinutes(today.getMinutes() - 16);
+
+  const arrALP = await getHistoricalStockDataAwait('AAPL', lastWeek, today, '1Hour', ALPACA_KEY, ALPACA_SECRET);
+  console.log(arrALP);
+
+  const arrPrice = [];
+  for (let index = 0; index < arrALP.length; index++) {
+    arrPrice.push(arrALP[index].OpenPrice);
+  }
+
+  const arrTimestamp = [];
+  for (let index = 0; index < arrALP.length; index++) {
+    arrTimestamp.push(arrALP[index].Timestamp);
+  }
+
   let chartProps1: ChartProps = {
-    xLabels: [
+    xLabels: arrTimestamp,
+
+    //aplaca
+
+    /*
       new Date('2020-01-01').toISOString(),
       new Date('2020-02-01').toISOString(),
       new Date('2020-03-01').toISOString(),
       new Date('2020-04-01').toISOString(),
       new Date('2020-05-01').toISOString(),
-    ],
+      */
+
     datasets: [
       {
-        type: 'line',
+        type: 'bubble',
         label: 'X',
-        data: [65, 59, 80, 81, 56, 55, 40],
+        data: [{ x: arr[0].date, y: arrPrice[0], r: 3 }],
+        pointRadius: 3,
+        backgroundColor: '#44e4ee',
+        hoverBackgroundColor: '#44e4ee',
+      },
+      {
+        type: 'line',
+        label: 'AAPL',
+        data: arrPrice,
       },
     ],
   };

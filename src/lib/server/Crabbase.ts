@@ -30,6 +30,7 @@ export async function writeOrder(order: Order) {
   ) {
     //check for brackets
     console.log('execute writeOrder');
+    order.date = new Date(order.date).toISOString();
     const docRef = crabbase.collection('DataStuff').doc(order.date);
     await docRef.set(order);
 
