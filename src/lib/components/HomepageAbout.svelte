@@ -184,10 +184,6 @@
     z-index: 1;
   }
 
-  .team {
-    overflow: hidden;
-  }
-
   .software {
     flex-basis: 100%;
     max-width: 1350px;
@@ -352,5 +348,35 @@
     font-weight: bold;
     text-shadow: 0 0 5px black;
     color: white;
+  }
+
+  @media (max-width: 900px) {
+    .box {
+      align-items: center;
+    }
+
+    .team {
+      flex-basis: 100%;
+      max-width: fit-content;
+      padding: 10px 20px 10px 20px;
+    }
+
+    .team > ul {
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .member > a {
+      flex-direction: row;
+      width: fit-content;
+    }
+
+    .connection {
+      top: 50px;
+      left: 50px;
+      right: 50px;
+      width: 10px;
+      height: calc(100% - 100px);
+    }
   }
 </style>
