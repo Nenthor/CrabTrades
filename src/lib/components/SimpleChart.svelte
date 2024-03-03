@@ -1,28 +1,27 @@
 <script lang="ts">
   import type { ChartProps } from '$lib/types';
   import {
-    BarController,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
+    BubbleController,
+    Chart,
+    Filler,
     Legend,
     LineController,
     LineElement,
     LinearScale,
     PointElement,
+    TimeScale,
     Tooltip,
     type ChartData,
   } from 'chart.js';
-  import Chart from 'chart.js/auto';
   import 'chartjs-adapter-luxon';
   import { onMount } from 'svelte';
 
-  ChartJS.register(LinearScale, CategoryScale, BarElement, PointElement, LineElement, Legend, Tooltip, LineController, BarController);
+  Chart.register(LineController, LineElement, BubbleController, PointElement, TimeScale, LinearScale, Filler, Legend, Tooltip);
 
   export let chartProps: ChartProps;
 
   let canvas: HTMLCanvasElement;
-  let chart: ChartJS;
+  let chart: Chart;
 
   $: updateChart(chartProps);
 

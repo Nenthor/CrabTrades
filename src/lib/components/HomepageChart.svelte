@@ -109,21 +109,21 @@
 
 <div id="charts">
   <h2 class="title">AI trading history</h2>
-  <ul class="charts">
+  <div class="charts">
     {#each charts as chart, index}
-      <button on:click={() => onChartClick(index)} id="chart{index}" class="chart">
+      <button on:click={() => onChartClick(index)} id="chart{index}" class="chart" aria-label="Chart button {index + 1}">
         <SimpleChart chartProps={chart} />
       </button>
     {/each}
     <div class="mobile_buttons">
-      <button on:click={() => onChartClick(0)} class="mobile_left">
+      <button on:click={() => onChartClick(0)} class="mobile_left" aria-label="Mobile button left">
         <img src="/images/svg/arrow-mobile.svg" alt="left" />
       </button>
-      <button on:click={() => onChartClick(2)} class="mobile_right">
+      <button on:click={() => onChartClick(2)} class="mobile_right" aria-label="Mobile button right">
         <img src="/images/svg/arrow-mobile.svg" alt="right" />
       </button>
     </div>
-  </ul>
+  </div>
 </div>
 
 <style>
