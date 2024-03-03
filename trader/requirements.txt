@@ -1,0 +1,7 @@
+numpy
+pandas
+requests
+tensorflow-cpu
+alpaca-py
+scikit-learn
+python-dotenv
