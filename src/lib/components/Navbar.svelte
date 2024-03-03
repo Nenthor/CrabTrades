@@ -48,9 +48,7 @@
 
 <nav bind:offsetWidth={total_width}>
   <a bind:offsetWidth={image_width} data-sveltekit-reload href={redirect} id="title">
-    <div class="image_container">
-      <img alt="CrabTrader" src="/images/navbar.webp" width="383" height="214" />
-    </div>
+    <img id="crabtrader" alt="CrabTrader" src="/images/navbar.webp" width="383" height="214" />
   </a>
   {#if isMobileMenu}
     <button id="nav_toggle" aria-label="Open mobile menu" on:click={() => onClick()}>
@@ -91,10 +89,9 @@
   }
 
   #title {
-    text-decoration: none;
-    display: flex;
-    margin-left: 25px;
-    align-items: center;
+    height: 100%;
+    width: 150px;
+    margin-left: min(1vw, 20px);
   }
 
   #nav_list {
@@ -106,13 +103,12 @@
     color: transparent !important;
   }
 
-  .image_container {
-    height: 75px;
-    width: 150px;
+  #crabtrader {
     animation: none;
+    object-fit: contain;
   }
 
-  .image_container:hover {
+  #crabtrader:hover {
     animation-name: crabdance;
     animation-duration: 4s;
     animation-iteration-count: infinite;

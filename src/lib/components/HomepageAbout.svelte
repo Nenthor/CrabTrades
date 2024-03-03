@@ -97,7 +97,7 @@
       <ul>
         {#each softwareItems as item}
           <li class="softwareItem">
-            <img class="side" src={item.logo} alt={item.name} title={item.name} />
+            <img class="side" src={item.logo} alt={item.name} />
             <div class="side">
               <p class="softwareTitle">{item.name}</p>
               <p class="softwareText">{item.text}</p>
@@ -109,21 +109,21 @@
     <div class="team">
       <h3>Team</h3>
       <ul>
-        <div class="connection" />
+        <li class="connection" />
         <li class="member">
-          <a href="https://github.com/vbielov">
+          <a href="https://github.com/vbielov" target="_blank">
             <img src="https://github.com/vbielov.png?size=100" alt="Bielov GitHub Icon" title="Click Me!" />
             <p>Bielov</p>
           </a>
         </li>
         <li class="member">
-          <a href="https://github.com/Nentwix">
+          <a href="https://github.com/Nentwix" target="_blank">
             <img src="https://github.com/nentwix.png?size=100" alt="Nentwix GitHub Icon" title="Click Me!" />
             <p>Nentwix</p>
           </a>
         </li>
         <li class="member">
-          <a href="https://github.com/lvl10Gopnik">
+          <a href="https://github.com/lvl10Gopnik" target="_blank">
             <img src="https://github.com/lvl10gopnik.png?size=100" alt="lvl10Gopnik GitHub Icon" title="Click Me!" />
             <p>lvl10Gopnik</p>
           </a>
@@ -132,7 +132,7 @@
     </div>
     <div class="github">
       <h3>Source Code</h3>
-      <a href="https://github.com/Nentwix/CrabTrades">
+      <a href="https://github.com/Nentwix/CrabTrades" target="_blank">
         <img src="/images/svg/software/github.svg" alt="GitHub Project" title="Click Me!" />
         <p>CrabTrades</p>
       </a>
