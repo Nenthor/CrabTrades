@@ -4,18 +4,12 @@ import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 const publicRouts = ['/', '/robots.txt', '/images', '/fonts', '/favicon.ico'];
 const onlyNonAuthRouts = ['/login', '/api/login'];
 const allowedUnauthRouts = [...publicRouts, ...onlyNonAuthRouts];
-const allowedOrigins = ['https://crabtrades.com', 'https://www.crabtrades.com', 'https://dev.crabtrades.com', 'http://localhost:8080'];
 
 // Executes before route specific hooks
 export const handle: Handle = (async ({ event, resolve }) => {
   const user = await getUserFromCookies(event.cookies);
   const isAuthanticated = hasAdminToken(event.request.headers.get('admin-token'));
 
-  if (!allowedOrigins.includes(event.url.origin)) {
-    // Redirect to allowed origin
-    console.log(`Unsupported Origin: Redirecting to ${allowedOrigins[0]}`);
-    return redirect(301, new URL(allowedOrigins[0]));
-  }
   if (!user && !isAllowedUnauthRoute(event.url.pathname) && !isAuthanticated) {
     // Redirect to login page if user is not logged in
     console.log('Redirecting to login page', event.url.pathname);
