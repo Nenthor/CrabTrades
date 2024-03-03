@@ -2,7 +2,6 @@ import { ALPACA_KEY, ALPACA_SECRET } from '$env/static/private';
 import { INITIAL_CAPITAL, START_DATE, getHistoricalStockDataAwait, getPortfolioValue } from '$lib/Alpaca';
 import { readCurrent, readDB } from '$lib/server/Crabbase';
 import type { ChartProps, HomepageStats } from '$lib/types';
-import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
 import type { PageServerLoad } from './$types';
 
 let homepageStats: HomepageStats;
@@ -50,32 +49,16 @@ async function getHomepageStats(): Promise<HomepageStats> {
 
 async function getTestCharts() {
   const arr = await readDB();
-  const arrDate = [];
-
-  for (let index = 0; index < arr.length; index++) {
-    const element: ChartProps = {
-      datasets: [],
-      xLabels: [],
-    };
-    arrDate.push(arr[index].date);
-  }
-
-  for (let index = 0; index < arr.length; index++) {
-    const element: ChartProps = {
-      datasets: [],
-      xLabels: [],
-    };
-    arrDate.push(arr[index].date);
-  }
 
   const lastWeek = new Date();
   lastWeek.setDate(lastWeek.getDate() - 7);
 
   const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDay() - 1);
   today.setMinutes(today.getMinutes() - 16);
 
   const arrALP = await getHistoricalStockDataAwait('AAPL', lastWeek, today, '1Hour', ALPACA_KEY, ALPACA_SECRET);
-  console.log(arrALP);
 
   const arrPrice = [];
   for (let index = 0; index < arrALP.length; index++) {
@@ -87,37 +70,59 @@ async function getTestCharts() {
     arrTimestamp.push(arrALP[index].Timestamp);
   }
 
+  const arrBUY = [];
+  const arrSELL = [];
+
+  for (let index = 0; index < arr.length; index++) {
+    var fromArrDay = new Date(arr[index].date);
+
+    if (arr[index].decision == 'BUY' && fromArrDay < yesterday && fromArrDay > lastWeek) {
+      //yesterday because alpaca does not give same day data and starts giving "1 am" data of the previous one
+      //add if statement checking lables l8ter if needed current setup works for single stock
+      arrBUY.push({ x: arr[index].date, y: arr[index].lastPrice, r: 3 });
+    } else if (arr[index].decision == 'SELL' && fromArrDay < yesterday && fromArrDay > lastWeek) {
+      //add if statement checking lables l8ter if needed current setup works for single stock
+      arrSELL.push({ x: arr[index].date, y: arr[index].lastPrice, r: 3 });
+    }
+  }
+
+  console.log(arrSELL); //DELETE LATER THIS IS DEBUG
+  console.log(arrBUY);
+
+  //ON ALL LINE CHARTS pointRadius has to be 0  apply to admin graphing l8ter
+
   let chartProps1: ChartProps = {
     xLabels: arrTimestamp,
-
-    //aplaca
-
-    /*
-      new Date('2020-01-01').toISOString(),
-      new Date('2020-02-01').toISOString(),
-      new Date('2020-03-01').toISOString(),
-      new Date('2020-04-01').toISOString(),
-      new Date('2020-05-01').toISOString(),
-      */
-
     datasets: [
       {
         type: 'bubble',
-        label: 'X',
-        data: [{ x: arr[0].date, y: arrPrice[0], r: 3 }],
+        label: 'BUY',
+        data: arrBUY,
         pointRadius: 3,
-        backgroundColor: '#44e4ee',
-        hoverBackgroundColor: '#44e4ee',
+        backgroundColor: '#10ff00',
+        hoverBackgroundColor: '#10ff00',
+      },
+      {
+        type: 'bubble',
+        label: 'SELL',
+        data: arrSELL,
+        pointRadius: 3,
+        backgroundColor: '#ff0000', //color is not optimal, almost same color as graph
+        hoverBackgroundColor: '#ff0000',
       },
       {
         type: 'line',
         label: 'AAPL',
+        backgroundColor: '#b42f1744',
+        hoverBackgroundColor: '#b42f1744',
         data: arrPrice,
+        pointRadius: 0,
       },
     ],
   };
 
   let chartProps2: ChartProps = {
+    //other charts replicate pattern from above
     xLabels: [
       new Date('2020-01-01').toISOString(),
       new Date('2020-02-01').toISOString(),
