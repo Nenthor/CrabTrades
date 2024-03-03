@@ -28,6 +28,7 @@ export interface Order {
   decision: string;
   portfolioValue: number;
   quantity: number;
+  price: number;
 }
 
 export interface Statics {
