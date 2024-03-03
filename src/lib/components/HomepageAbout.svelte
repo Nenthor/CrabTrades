@@ -91,21 +91,21 @@
     Sciences. So there are probably a million ways to make it better, but perfection wasn't our goal - it was about getting in touch with new
     technologies, challenging ourselves and of course having fun.
   </p>
+  <div class="software">
+    <h3>Created with</h3>
+    <ul>
+      {#each softwareItems as item}
+        <li class="softwareItem">
+          <img class="side" src={item.logo} alt={item.name} />
+          <div class="side">
+            <p class="softwareTitle">{item.name}</p>
+            <p class="softwareText">{item.text}</p>
+          </div>
+        </li>
+      {/each}
+    </ul>
+  </div>
   <div class="box">
-    <div class="software">
-      <h3>Created with</h3>
-      <ul>
-        {#each softwareItems as item}
-          <li class="softwareItem">
-            <img class="side" src={item.logo} alt={item.name} />
-            <div class="side">
-              <p class="softwareTitle">{item.name}</p>
-              <p class="softwareText">{item.text}</p>
-            </div>
-          </li>
-        {/each}
-      </ul>
-    </div>
     <div class="team">
       <h3>Team</h3>
       <ul>
@@ -173,19 +173,26 @@
   .software,
   .team {
     width: fit-content;
-    max-width: 90vw;
+    max-width: calc(100vw - 100px);
     background-color: #323232;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding: 10px 0 30px 0;
+    padding: 10px 20px 20px 20px;
     z-index: 1;
+  }
+
+  .team {
+    overflow: hidden;
   }
 
   .software {
     flex-basis: 100%;
+    max-width: 1350px;
+    width: calc(100vw - 100px);
+    padding: 10px 20px 30px 20px;
   }
 
   .github > h3,
