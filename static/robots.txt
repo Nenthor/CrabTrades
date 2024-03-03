@@ -1,4 +1,3 @@
 user-agent: *
-Allow: /
-Disallow: /login
-Disallow: /admin
+Allow: /$
+Disallow: /

@@ -17,8 +17,8 @@
       text: 'Running our containerized server',
     },
     {
-      name: 'Cloud Functions',
-      logo: '/images/svg/software/cloud-functions.svg',
+      name: 'Compute Engine',
+      logo: '/images/svg/software/compute-engine.svg',
       text: 'Executes AI stock trading model',
     },
     {
@@ -44,7 +44,7 @@
     {
       name: 'TensorFlow',
       logo: '/images/svg/software/tensorflow.svg',
-      text: 'Our Stock trading AI model',
+      text: 'Building our AI stock trading model',
     },
     {
       name: 'SvelteKit',
@@ -180,7 +180,7 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding: 10px;
+    padding: 10px 0 30px 0;
     z-index: 1;
   }
 
@@ -191,7 +191,7 @@
   .github > h3,
   .software > h3,
   .team > h3 {
-    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
     color: var(--secondary);
   }
 
