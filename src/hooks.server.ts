@@ -4,18 +4,11 @@ import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 const publicRouts = ['/'];
 const onlyNonAuthRouts = ['/login', '/api/login'];
 const allowedUnauthRouts = [...publicRouts, ...onlyNonAuthRouts];
-const allowedHostnames = ['crabtrades.com', 'www.crabtrades.com', 'dev.crabtrades.com', 'localhost'];
 
 // Executes before route specific hooks
 export const handle: Handle = (async ({ event, resolve }) => {
   const user = await getUserFromCookies(event.cookies);
   const isAuthanticated = hasAdminToken(event.request.headers.get('admin-token'));
-  console.log(event.url.href);
-  if (!allowedHostnames.includes(event.url.hostname)) {
-    // Redirect to home page if user is logged in
-    console.log('Redirecting to valid hostname', event.url.pathname);
-    redirect(301, 'https://crabtrades.com');
-  }
 
   if (!user && !allowedUnauthRouts.includes(event.url.pathname) && !isAuthanticated) {
     // Redirect to login page if user is not logged in
