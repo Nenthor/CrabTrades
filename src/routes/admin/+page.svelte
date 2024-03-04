@@ -6,6 +6,10 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+  <meta name="robots" content="noindex" />
+</svelte:head>
+
 <Navbar />
 
 <main>
