@@ -19,6 +19,7 @@ export const POST = (async ({ request }) => {
       decision: decision,
       portfolioValue: isNaN(portfolioValue) ? -1 : portfolioValue,
       quantity: isNaN(quantity) ? -1 : quantity,
+      lastPrice: 0, // fix this shit l8ter
     };
 
     var success = await writeOrder(order);

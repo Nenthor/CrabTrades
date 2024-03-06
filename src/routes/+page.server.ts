@@ -55,7 +55,7 @@ async function getTestCharts() {
 
   const today = new Date();
   const yesterday = new Date();
-  yesterday.setDate(today.getDay() - 1);
+  yesterday.setDate(today.getDay() - 1); //probably up for deletion
   today.setMinutes(today.getMinutes() - 16);
 
   const arrALP = await getHistoricalStockDataAwait('AAPL', lastWeek, today, '1Hour', ALPACA_KEY, ALPACA_SECRET);
@@ -73,14 +73,21 @@ async function getTestCharts() {
   const arrBUY = [];
   const arrSELL = [];
 
-  for (let index = 0; index < arr.length; index++) {
-    var fromArrDay = new Date(arr[index].date);
+  var indexLength = arr.length;
 
-    if (arr[index].decision == 'BUY' && fromArrDay < yesterday && fromArrDay > lastWeek) {
-      //yesterday because alpaca does not give same day data and starts giving "1 am" data of the previous one
+  if (arr.length > 25) {
+    //once db has more entries then 25 => check only 25 entries
+    indexLength = 25;
+  }
+
+  for (let index = 0; index < indexLength /*once db is full change to static value*/; index++) {
+    var fromArrDate = new Date(arr[arr.length - index - 1].date);
+    var fromArrDay = fromArrDate.getDay();
+
+    if (arr[index].decision == 'BUY' && fromArrDate < today && fromArrDate > lastWeek && fromArrDay !== 6 && fromArrDay !== 0) {
       //add if statement checking lables l8ter if needed current setup works for single stock
       arrBUY.push({ x: arr[index].date, y: arr[index].lastPrice, r: 3 });
-    } else if (arr[index].decision == 'SELL' && fromArrDay < yesterday && fromArrDay > lastWeek) {
+    } else if (arr[index].decision == 'SELL' && fromArrDate < today && fromArrDate > lastWeek) {
       //add if statement checking lables l8ter if needed current setup works for single stock
       arrSELL.push({ x: arr[index].date, y: arr[index].lastPrice, r: 3 });
     }
