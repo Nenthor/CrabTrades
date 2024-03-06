@@ -75,6 +75,7 @@
 
 <svelte:head>
   <script src="https://www.google.com/recaptcha/api.js?render={PUBLIC_KEY}" async defer></script>
+  <meta name="robots" content="noindex" />
 </svelte:head>
 
 <Navbar {addHomeLink}>
