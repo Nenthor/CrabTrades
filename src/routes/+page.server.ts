@@ -58,20 +58,20 @@ async function getTestCharts() {
   yesterday.setDate(today.getDay() - 1); //probably up for deletion
   today.setMinutes(today.getMinutes() - 16);
 
-  const arrALP = await getHistoricalStockDataAwait('AAPL', lastWeek, today, '1Hour', ALPACA_KEY, ALPACA_SECRET);
+  const arrAAPL = await getHistoricalStockDataAwait('AAPL', lastWeek, today, '1Hour', ALPACA_KEY, ALPACA_SECRET);
 
-  const arrPrice = [];
-  for (let index = 0; index < arrALP.length; index++) {
-    arrPrice.push(arrALP[index].OpenPrice);
+  const arrPriceAAPL = [];
+  for (let index = 0; index < arrAAPL.length; index++) {
+    arrPriceAAPL.push(arrAAPL[index].OpenPrice);
   }
 
   const arrTimestamp = [];
-  for (let index = 0; index < arrALP.length; index++) {
-    arrTimestamp.push(arrALP[index].Timestamp);
+  for (let index = 0; index < arrAAPL.length; index++) {
+    arrTimestamp.push(arrAAPL[index].Timestamp);
   }
 
-  const arrBUY = [];
-  const arrSELL = [];
+  const arrBUYAAPL = [];
+  const arrSELLAAPL = [];
 
   var indexLength = arr.length;
 
@@ -81,20 +81,21 @@ async function getTestCharts() {
   }
 
   for (let index = 0; index < indexLength /*once db is full change to static value*/; index++) {
-    var fromArrDate = new Date(arr[arr.length - index - 1].date);
+    var indexConv = arr.length - index - 1; //to read array backwards
+    var fromArrDate = new Date(arr[indexConv].date);
     var fromArrDay = fromArrDate.getDay();
 
-    if (arr[index].decision == 'BUY' && fromArrDate < today && fromArrDate > lastWeek && fromArrDay !== 6 && fromArrDay !== 0) {
+    if (arr[index].decision == 'BUY' && fromArrDate < today && fromArrDate > lastWeek && fromArrDay != 6 && fromArrDay != 0) {
       //add if statement checking lables l8ter if needed current setup works for single stock
-      arrBUY.push({ x: arr[index].date, y: arr[index].lastPrice, r: 3 });
+      arrBUYAAPL.push({ x: arr[indexConv].date, y: arr[indexConv].lastPrice, r: 3 });
     } else if (arr[index].decision == 'SELL' && fromArrDate < today && fromArrDate > lastWeek) {
       //add if statement checking lables l8ter if needed current setup works for single stock
-      arrSELL.push({ x: arr[index].date, y: arr[index].lastPrice, r: 3 });
+      arrSELLAAPL.push({ x: arr[indexConv].date, y: arr[indexConv].lastPrice, r: 3 });
     }
   }
 
-  console.log(arrSELL); //DELETE LATER THIS IS DEBUG
-  console.log(arrBUY);
+  console.log(arrSELLAAPL); //DELETE LATER THIS IS DEBUG
+  console.log(arrBUYAAPL);
 
   //ON ALL LINE CHARTS pointRadius has to be 0  apply to admin graphing l8ter
 
@@ -104,7 +105,7 @@ async function getTestCharts() {
       {
         type: 'bubble',
         label: 'BUY',
-        data: arrBUY,
+        data: arrBUYAAPL,
         pointRadius: 3,
         backgroundColor: '#10ff00',
         hoverBackgroundColor: '#10ff00',
@@ -112,7 +113,7 @@ async function getTestCharts() {
       {
         type: 'bubble',
         label: 'SELL',
-        data: arrSELL,
+        data: arrSELLAAPL,
         pointRadius: 3,
         backgroundColor: '#ff0000', //color is not optimal, almost same color as graph
         hoverBackgroundColor: '#ff0000',
@@ -122,7 +123,7 @@ async function getTestCharts() {
         label: 'AAPL',
         backgroundColor: '#b42f1744',
         hoverBackgroundColor: '#b42f1744',
-        data: arrPrice,
+        data: arrPriceAAPL,
         pointRadius: 0,
       },
     ],
