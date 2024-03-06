@@ -59,6 +59,7 @@ async function getTestCharts() {
   today.setMinutes(today.getMinutes() - 16);
 
   const arrAAPL = await getHistoricalStockDataAwait('AAPL', lastWeek, today, '1Hour', ALPACA_KEY, ALPACA_SECRET);
+  const arrMSFT = await getHistoricalStockDataAwait('MSFT', lastWeek, today, '1Hour', ALPACA_KEY, ALPACA_SECRET);
 
   const arrPriceAAPL = [];
   for (let index = 0; index < arrAAPL.length; index++) {
@@ -70,8 +71,16 @@ async function getTestCharts() {
     arrTimestamp.push(arrAAPL[index].Timestamp);
   }
 
+  const arrPriceMSFT = [];
+  for (let index = 0; index < arrMSFT.length; index++) {
+    arrPriceMSFT.push(arrMSFT[index].OpenPrice);
+  }
+
   const arrBUYAAPL = [];
   const arrSELLAAPL = [];
+
+  const arrBUYMSFT = [];
+  const arrSELLMSFT = [];
 
   var indexLength = arr.length;
 
@@ -85,12 +94,26 @@ async function getTestCharts() {
     var fromArrDate = new Date(arr[indexConv].date);
     var fromArrDay = fromArrDate.getDay();
 
-    if (arr[index].decision == 'BUY' && fromArrDate < today && fromArrDate > lastWeek && fromArrDay != 6 && fromArrDay != 0) {
+    if (arr[indexConv].decision == 'BUY' && fromArrDate < today && fromArrDate > lastWeek && fromArrDay != 6 && fromArrDay != 0) {
       //add if statement checking lables l8ter if needed current setup works for single stock
-      arrBUYAAPL.push({ x: arr[indexConv].date, y: arr[indexConv].lastPrice, r: 3 });
-    } else if (arr[index].decision == 'SELL' && fromArrDate < today && fromArrDate > lastWeek) {
+
+      if (arr[indexConv].symbol == 'AAPL') {
+        arrBUYAAPL.push({ x: arr[indexConv].date, y: arr[indexConv].lastPrice, r: 3 });
+      }
+
+      if (arr[indexConv].symbol == 'MSFT') {
+        arrBUYMSFT.push({ x: arr[indexConv].date, y: arr[indexConv].lastPrice, r: 3 });
+      }
+    } else if (arr[indexConv].decision == 'SELL' && fromArrDate < today && fromArrDate > lastWeek) {
       //add if statement checking lables l8ter if needed current setup works for single stock
-      arrSELLAAPL.push({ x: arr[indexConv].date, y: arr[indexConv].lastPrice, r: 3 });
+
+      if (arr[indexConv].symbol == 'AAPL') {
+        arrSELLAAPL.push({ x: arr[indexConv].date, y: arr[indexConv].lastPrice, r: 3 });
+      }
+
+      if (arr[indexConv].symbol == 'MSFT') {
+        arrSELLMSFT.push({ x: arr[indexConv].date, y: arr[indexConv].lastPrice, r: 3 });
+      }
     }
   }
 
@@ -130,19 +153,33 @@ async function getTestCharts() {
   };
 
   let chartProps2: ChartProps = {
+    //due to does not work as intended
     //other charts replicate pattern from above
-    xLabels: [
-      new Date('2020-01-01').toISOString(),
-      new Date('2020-02-01').toISOString(),
-      new Date('2020-03-01').toISOString(),
-      new Date('2020-04-01').toISOString(),
-      new Date('2020-06-01').toISOString(),
-    ],
+    xLabels: arrTimestamp, //not sure if timestamp form MSFT and AAPL is the same
     datasets: [
       {
+        type: 'bubble',
+        label: 'BUY',
+        data: arrBUYMSFT,
+        pointRadius: 3,
+        backgroundColor: '#10ff00',
+        hoverBackgroundColor: '#10ff00',
+      },
+      {
+        type: 'bubble',
+        label: 'SELL',
+        data: arrSELLMSFT,
+        pointRadius: 3,
+        backgroundColor: '#ff0000', //color is not optimal, almost same color as graph
+        hoverBackgroundColor: '#ff0000',
+      },
+      {
         type: 'line',
-        label: 'AAPL',
-        data: [42, 100, 50, 60, 40, 35, 20],
+        label: 'MSFT',
+        backgroundColor: '#b42f1744',
+        hoverBackgroundColor: '#b42f1744',
+        data: arrPriceMSFT,
+        pointRadius: 0,
       },
     ],
   };
