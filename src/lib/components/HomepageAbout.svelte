@@ -117,9 +117,9 @@
           </a>
         </li>
         <li class="member">
-          <a href="https://github.com/Nentwix" target="_blank">
-            <img src="https://github.com/nentwix.png?size=100" alt="Nentwix GitHub Icon" title="Click Me!" />
-            <p>Nentwix</p>
+          <a href="https://github.com/nenthor" target="_blank">
+            <img src="https://github.com/nenthor.png?size=100" alt="Nenthor GitHub Icon" title="Click Me!" />
+            <p>Nenthor</p>
           </a>
         </li>
         <li class="member">
