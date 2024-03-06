@@ -132,7 +132,7 @@
     </div>
     <div class="github">
       <h3>Source Code</h3>
-      <a href="https://github.com/Nentwix/CrabTrades" target="_blank">
+      <a href="https://github.com/nenthor/CrabTrades" target="_blank">
         <img src="/images/svg/software/github.svg" alt="GitHub Project" title="Click Me!" />
         <p>CrabTrades</p>
       </a>
