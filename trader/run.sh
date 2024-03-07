@@ -38,7 +38,11 @@ if [ ! -e main.py ]; then
 fi
 
 # Run script
-python main.py
+python main.py AAPL
+python main.py NVDA
+python main.py META
+python main.py AMD
+python main.py MSFT
 
 # Deactivate the virtual environment
 deactivate
