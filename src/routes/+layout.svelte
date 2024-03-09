@@ -13,6 +13,7 @@
     --primary-dark: #b42f17;
     --secondary: #2fa775;
     --secondary-light: #5de6a6;
+    --secondary-medium: #3bc98f;
     --secondary-dark: #2a9f6d;
     --success: #32cd32;
     --error: #cd3232;

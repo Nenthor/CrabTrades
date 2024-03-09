@@ -195,7 +195,7 @@
   .software > h3,
   .team > h3 {
     font-size: clamp(1.2rem, 5vw, 1.5rem);
-    color: var(--secondary);
+    color: var(--secondary-medium);
   }
 
   .software > ul,
@@ -253,7 +253,7 @@
     width: calc(100% - 10px);
     padding: 5px;
     color: white;
-    background-color: var(--secondary);
+    background-color: var(--secondary-medium);
     transform: rotateX(-90deg) translateZ(75px);
     display: flex;
     flex-direction: column;
