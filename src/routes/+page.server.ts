@@ -1,6 +1,6 @@
 import { ALPACA_KEY, ALPACA_SECRET } from '$env/static/private';
 import { INITIAL_CAPITAL, START_DATE, getPortfolioValue } from '$lib/Alpaca';
-import { readCurrent } from '$lib/server/Crabbase';
+import { readDB } from '$lib/server/Crabbase';
 import type { ChartProps, HomepageStats } from '$lib/types';
 import type { PageServerLoad } from './$types';
 
@@ -22,7 +22,7 @@ async function getHomepageStats(): Promise<HomepageStats> {
     let maxFetches = 2;
     let data: HomepageStats = { assetsValue: 0, profit: 0, orders: 0, uptime: START_DATE, charts: getTestCharts() };
 
-    readCurrent().then((o) => {
+    readDB().then((o) => {
       data.orders = o.length;
       maxFetches--;
       if (maxFetches <= 0) {
