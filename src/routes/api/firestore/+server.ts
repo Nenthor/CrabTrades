@@ -6,18 +6,15 @@ export const POST = (async ({ request }) => {
   const symbol = request.headers.get('symbol')?.toString().trim();
   const date = request.headers.get('date')?.toString().trim();
   const decision = request.headers.get('decision')?.toString().trim();
-  const portfolioValueString = request.headers.get('portfolioValue')?.toString().trim();
   const quantityString = request.headers.get('quantity')?.toString().trim();
 
-  if (symbol && date && decision && portfolioValueString && quantityString) {
-    let portfolioValue = parseFloat(portfolioValueString);
+  if (symbol && date && decision && quantityString && (decision === 'BUY' || decision === 'SELL')) {
     let quantity = parseFloat(quantityString);
 
     const order: Order = {
       symbol: symbol,
-      date: date,
+      date: new Date(date),
       decision: decision,
-      portfolioValue: isNaN(portfolioValue) ? -1 : portfolioValue,
       quantity: isNaN(quantity) ? -1 : quantity,
     };
 

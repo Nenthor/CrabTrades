@@ -3,8 +3,13 @@ export interface ChartProps {
   datasets: {
     type: 'line' | 'bubble';
     label: string;
-    data: number[];
+    data: (number | { x: string; y: number; r: number })[];
     color?: string;
+
+    backgroundColor?: string;
+    hoverBackgroundColor?: string;
+    pointRadius?: number;
+    hitRadius?: number;
   }[];
 }
 
@@ -20,16 +25,13 @@ export interface StockData {
 
 export interface Order {
   symbol: string;
-  date: string;
-  decision: string;
-  portfolioValue: number;
+  date: Date;
+  decision: 'BUY' | 'SELL';
   quantity: number;
 }
 
-export interface Statics {
-  text: string;
-  stuff: string;
-  value: number;
+export interface Static {
+  orderCount: number;
 }
 
 export interface Auth {
