@@ -32,15 +32,15 @@
       type: dataset.type,
       label: dataset.label,
       fill: true,
-      backgroundColor: dataset.backgroundColor, // primary-dark with 44 alpha
-      borderColor: '#dd452b', // primary
+      backgroundColor: dataset.backgroundColor,
+      borderColor: `${dataset.backgroundColor?.slice(0, 7)}`,
       pointBorderWidth: 0,
       pointHoverRadius: 0,
       pointHoverBackgroundColor: dataset.hoverBackgroundColor,
       pointHoverBorderColor: 'rgba(220, 220, 220,1)',
       pointHoverBorderWidth: 0,
       pointRadius: dataset.pointRadius,
-      pointHitRadius: 7,
+      pointHitRadius: dataset.hitRadius || 3,
       data: dataset.data as any,
       radius: 10,
     });

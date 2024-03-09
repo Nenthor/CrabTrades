@@ -9,6 +9,7 @@ export interface ChartProps {
     backgroundColor?: string;
     hoverBackgroundColor?: string;
     pointRadius?: number;
+    hitRadius?: number;
   }[];
 }
 
@@ -24,17 +25,13 @@ export interface StockData {
 
 export interface Order {
   symbol: string;
-  date: string;
-  decision: string;
-  portfolioValue: number;
+  date: Date;
+  decision: 'BUY' | 'SELL';
   quantity: number;
-  lastPrice: number;
 }
 
-export interface Statics {
-  text: string;
-  stuff: string;
-  value: number;
+export interface Static {
+  orderCount: number;
 }
 
 export interface Auth {

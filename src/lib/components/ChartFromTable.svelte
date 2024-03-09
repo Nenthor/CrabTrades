@@ -99,7 +99,6 @@
       chartProps.datasets[1].label = 'APPLE BUBBLE';
     }
 
-    console.log(chartProps.datasets[0].data);
     return chartProps;
   }
 </script>
