@@ -11,3 +11,4 @@ vite.config.ts.timestamp-*
 trader/model.keras
 trader/dataset.csv
 trader/tensorflow_env
+trader/main.py

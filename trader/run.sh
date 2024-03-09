@@ -1,6 +1,9 @@
+# Make me executable! chmod +x run.sh
+
 # Guide Install TensorFlow on Debian 11: https://kifarunix.com/install-tensorflow-on-debian/
 
 VENV_NAME="tensorflow_env"
+notebook_file="notebook.ipynb"
 
 python3 -V # TensorFlow requires Python 3.7+
 
@@ -24,8 +27,22 @@ while read -r line || [[ -n "$line" ]]; do
     fi
 done < ./requirements.txt
 
+# Convert the notebook to a script if it doesn't exist
+if [ ! -e main.py ]; then
+    # Install the package if it's not installed
+    if ! pip show jupyter &> /dev/null; then
+        pip install jupyter
+    fi
+
+    jupyter nbconvert --to script --output main "$notebook_file"
+fi
+
 # Run script
-python main.py
+python main.py AAPL
+python main.py NVDA
+python main.py META
+python main.py AMD
+python main.py MSFT
 
 # Deactivate the virtual environment
 deactivate
