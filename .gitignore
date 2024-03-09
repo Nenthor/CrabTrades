@@ -8,3 +8,7 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+trader/model.keras
+trader/dataset.csv
+trader/tensorflow_env
+trader/main.py

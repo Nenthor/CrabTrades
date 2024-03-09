@@ -17,8 +17,8 @@
       text: 'Running our containerized server',
     },
     {
-      name: 'Cloud Functions',
-      logo: '/images/svg/software/cloud-functions.svg',
+      name: 'Compute Engine',
+      logo: '/images/svg/software/compute-engine.svg',
       text: 'Executes AI stock trading model',
     },
     {
@@ -42,9 +42,9 @@
       text: 'Paper trading API & historical data',
     },
     {
-      name: 'PyTorch',
-      logo: '/images/svg/software/pytorch.svg',
-      text: 'Our Stock trading AI model',
+      name: 'TensorFlow',
+      logo: '/images/svg/software/tensorflow.svg',
+      text: 'Building our AI stock trading model',
     },
     {
       name: 'SvelteKit',
@@ -91,39 +91,39 @@
     Sciences. So there are probably a million ways to make it better, but perfection wasn't our goal - it was about getting in touch with new
     technologies, challenging ourselves and of course having fun.
   </p>
+  <div class="software">
+    <h3>Created with</h3>
+    <ul>
+      {#each softwareItems as item}
+        <li class="softwareItem">
+          <img class="side" src={item.logo} alt={item.name} />
+          <div class="side">
+            <p class="softwareTitle">{item.name}</p>
+            <p class="softwareText">{item.text}</p>
+          </div>
+        </li>
+      {/each}
+    </ul>
+  </div>
   <div class="box">
-    <div class="software">
-      <h3>Created with</h3>
-      <ul>
-        {#each softwareItems as item}
-          <li class="softwareItem">
-            <img class="side" src={item.logo} alt={item.name} title={item.name} />
-            <div class="side">
-              <p class="softwareTitle">{item.name}</p>
-              <p class="softwareText">{item.text}</p>
-            </div>
-          </li>
-        {/each}
-      </ul>
-    </div>
     <div class="team">
       <h3>Team</h3>
       <ul>
-        <div class="connection" />
+        <li class="connection" />
         <li class="member">
-          <a href="https://github.com/vbielov">
+          <a href="https://github.com/vbielov" target="_blank">
             <img src="https://github.com/vbielov.png?size=100" alt="Bielov GitHub Icon" title="Click Me!" />
             <p>Bielov</p>
           </a>
         </li>
         <li class="member">
-          <a href="https://github.com/Nentwix">
-            <img src="https://github.com/nentwix.png?size=100" alt="Nentwix GitHub Icon" title="Click Me!" />
-            <p>Nentwix</p>
+          <a href="https://github.com/nenthor" target="_blank">
+            <img src="https://github.com/nenthor.png?size=100" alt="Nenthor GitHub Icon" title="Click Me!" />
+            <p>Nenthor</p>
           </a>
         </li>
         <li class="member">
-          <a href="https://github.com/lvl10Gopnik">
+          <a href="https://github.com/lvl10Gopnik" target="_blank">
             <img src="https://github.com/lvl10gopnik.png?size=100" alt="lvl10Gopnik GitHub Icon" title="Click Me!" />
             <p>lvl10Gopnik</p>
           </a>
@@ -132,7 +132,7 @@
     </div>
     <div class="github">
       <h3>Source Code</h3>
-      <a href="https://github.com/Nentwix/CrabTrades">
+      <a href="https://github.com/nenthor/CrabTrades" target="_blank">
         <img src="/images/svg/software/github.svg" alt="GitHub Project" title="Click Me!" />
         <p>CrabTrades</p>
       </a>
@@ -173,25 +173,28 @@
   .software,
   .team {
     width: fit-content;
-    max-width: 90vw;
+    max-width: calc(100vw - 100px);
     background-color: #323232;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding: 10px;
+    padding: 10px 20px 20px 20px;
     z-index: 1;
   }
 
   .software {
     flex-basis: 100%;
+    max-width: 1350px;
+    width: calc(100vw - 100px);
+    padding: 10px 20px 30px 20px;
   }
 
   .github > h3,
   .software > h3,
   .team > h3 {
-    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
     color: var(--secondary);
   }
 
@@ -345,5 +348,35 @@
     font-weight: bold;
     text-shadow: 0 0 5px black;
     color: white;
+  }
+
+  @media (max-width: 900px) {
+    .box {
+      align-items: center;
+    }
+
+    .team {
+      flex-basis: 100%;
+      max-width: fit-content;
+      padding: 10px 20px 10px 20px;
+    }
+
+    .team > ul {
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .member > a {
+      flex-direction: row;
+      width: fit-content;
+    }
+
+    .connection {
+      top: 50px;
+      left: 50px;
+      right: 50px;
+      width: 10px;
+      height: calc(100% - 100px);
+    }
   }
 </style>
