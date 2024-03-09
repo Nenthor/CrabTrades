@@ -32,7 +32,7 @@
       label: dataset.label,
       fill: true,
       backgroundColor: '#b42f1744', // primary-dark with 44 alpha
-      borderColor: '#dd452b', // primary
+      borderColor: '#d73d23', // primary
       pointBorderWidth: 0,
       pointHoverRadius: 0,
       pointHoverBackgroundColor: 'rgb(0, 0, 0)',
