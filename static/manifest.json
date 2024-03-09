@@ -2,7 +2,7 @@
   "name": "CrabTrades",
   "description": "AI powered stock trading bot - Our first semester project",
   "start_url": "/",
-  "display": "standalone",
+  "display": "minimal-ui",
   "background_color": "#d73d23",
   "theme_color": "#d73d23",
   "icons": [
