@@ -1,5 +1,5 @@
 import { DB_TOKEN } from '$env/static/private';
-import { cert, initializeApp } from 'firebase-admin/app';
+import { cert, getApp, getApps, initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 
 const credential: any = {
@@ -16,5 +16,8 @@ const credential: any = {
   universe_domain: 'googleapis.com',
 };
 
-const app = initializeApp({ credential: cert(credential) });
-export const crabbase = getFirestore(app);
+if (!getApps().length) {
+  initializeApp({ credential: cert(credential) });
+}
+
+export const crabbase = getFirestore(getApp());
