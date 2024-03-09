@@ -31,17 +31,17 @@
       type: dataset.type,
       label: dataset.label,
       fill: true,
-      backgroundColor: '#b42f1744', // primary-dark with 44 alpha
-      borderColor: '#dd452b', // primary
+      backgroundColor: dataset.backgroundColor,
+      borderColor: `${dataset.backgroundColor?.slice(0, 7)}`,
       pointBorderWidth: 0,
       pointHoverRadius: 0,
-      pointHoverBackgroundColor: 'rgb(0, 0, 0)',
+      pointHoverBackgroundColor: dataset.hoverBackgroundColor,
       pointHoverBorderColor: 'rgba(220, 220, 220,1)',
       pointHoverBorderWidth: 0,
-      pointRadius: 0,
-      pointHitRadius: 7,
-      data: dataset.data,
-      radius: 50,
+      pointRadius: dataset.pointRadius,
+      pointHitRadius: dataset.hitRadius || 3,
+      data: dataset.data as any,
+      radius: 10,
     });
   });
 
@@ -75,8 +75,13 @@
 
   function updateChart(chartProps: ChartProps) {
     if (!chartProps || !chart) return;
-    chart.data.datasets[0].label = chartProps.datasets[0].label;
-    chart.data.datasets[0].data = chartProps.datasets[0].data;
+
+    for (let i = 0; i < chartProps.datasets.length; i++) {
+      chart.data.datasets[i].type = chartProps.datasets[i].type;
+      chart.data.datasets[i].label = chartProps.datasets[i].label;
+      chart.data.datasets[i].data = chartProps.datasets[i].data as any;
+    }
+
     chart.data.labels = chartProps.xLabels;
     chart.update();
   }

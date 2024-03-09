@@ -1,4 +1,4 @@
-import type { Auth, Order, Statics } from '$lib/types';
+import type { Auth, Order, Static } from '$lib/types';
 import { crabbase } from './FirestoreApp';
 
 /*
@@ -21,21 +21,15 @@ export async function writeOrder(order: Order) {
   const regexp: RegExp = /[()]/gi;
   const regexp2: RegExp = /[/]/gi;
 
-  if (
-    !regexp.test(order.symbol) &&
-    !regexp2.test(order.symbol) &&
-    !regexp.test(order.date) &&
-    !regexp2.test(order.date) &&
-    (order.decision == 'BUY' || order.decision == 'SELL')
-  ) {
-    //check for brackets
-    console.log('execute writeOrder');
-    const docRef = crabbase.collection('DataStuff').doc(order.date);
+  if (!regexp.test(order.symbol) && !regexp2.test(order.symbol) && (order.decision == 'BUY' || order.decision == 'SELL')) {
+    // Add Order to collection
+    const docRef = crabbase.collection('DataStuff').doc(order.date.toISOString());
     await docRef.set(order);
 
-    console.log('execute write on curent'); // write on current
-    const docRef2 = crabbase.collection('current').doc('currentDate');
-    await docRef2.set(order);
+    // Update Order Count
+    const staticValues = await readStatic();
+    staticValues.orderCount++;
+    await writeStatic(staticValues);
 
     return true;
   } else {
@@ -53,37 +47,25 @@ export async function logAuth(username: string, password: string) {
   await docRef.set(auth);
 }
 
-export async function writeStatic(statics: Statics) {
-  console.log('write Static'); // write on current
-  const docRef2 = crabbase.collection('current').doc('Static');
+export async function readDB(startTime = new Date(0)) {
+  const snapshot = await crabbase.collection('DataStuff').where('date', '>', startTime).get();
+
+  const arr: Order[] = [];
+
+  snapshot.forEach((doc: any) => {
+    const d: Order = doc.data();
+    d.date = new Date((d.date as any)._seconds * 1000); // Firebase TimeStamp to Date object
+    arr.push(d);
+  });
+  return arr;
+}
+
+export async function readStatic() {
+  const doc = await crabbase.collection('Static').doc('static').get();
+  return doc.data() as Static;
+}
+
+export async function writeStatic(statics: Static) {
+  const docRef2 = crabbase.collection('Static').doc('static');
   await docRef2.set(statics);
-}
-
-export async function readDB() {
-  const snapshot = await crabbase.collection('DataStuff').get();
-
-  const arr: Order[] = [];
-
-  snapshot.forEach((doc: any) => {
-    //    console.log(/*doc.id, '=>',*/ doc.data());
-    const d: Order = doc.data();
-    arr.push(d);
-    //    console.log(d.date)
-  });
-  return arr;
-}
-
-export async function readCurrent() {
-  //array value 1 is recent, array value 0 is statics
-  const snapshot = await crabbase.collection('current').get();
-
-  const arr: Order[] = [];
-
-  snapshot.forEach((doc: any) => {
-    //    console.log(/*doc.id, '=>',*/ doc.data());
-    const d: Order = doc.data();
-    arr.push(d);
-    //    console.log(d.date)
-  });
-  return arr;
 }
