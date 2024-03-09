@@ -1,7 +1,7 @@
 import { defaultUser, getUserFromCookies, hasAdminToken } from '$lib/server/Auth';
 import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 
-const publicRouts = ['/'];
+const publicRouts = ['/', '/robots.txt'];
 const onlyNonAuthRouts = ['/login', '/api/login'];
 const allowedUnauthRouts = [...publicRouts, ...onlyNonAuthRouts];
 

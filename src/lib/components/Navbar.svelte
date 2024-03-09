@@ -16,8 +16,11 @@
   let isRoot = true;
 
   onMount(() => {
-    window.addEventListener('resize', checkNavbarWidth);
     setRedirect();
+    window.addEventListener('resize', checkNavbarWidth);
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+    });
   });
 
   $: if (total_width != 0 && image_width != 0 && list_width != 0) {

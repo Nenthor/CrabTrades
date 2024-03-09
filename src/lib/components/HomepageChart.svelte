@@ -147,7 +147,7 @@
 
   .title {
     font-size: clamp(1rem, 7vw, 3rem);
-    color: var(--primary-light);
+    color: var(--primary);
     background-color: white;
     padding: 75px 50px 20px 50px;
     border-bottom-left-radius: 20px;
