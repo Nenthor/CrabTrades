@@ -76,8 +76,13 @@
 
   function updateChart(chartProps: ChartProps) {
     if (!chartProps || !chart) return;
-    chart.data.datasets[0].label = chartProps.datasets[0].label;
-    chart.data.datasets[0].data = chartProps.datasets[0].data as any;
+
+    for (let i = 0; i < chartProps.datasets.length; i++) {
+      chart.data.datasets[i].type = chartProps.datasets[i].type;
+      chart.data.datasets[i].label = chartProps.datasets[i].label;
+      chart.data.datasets[i].data = chartProps.datasets[i].data as any;
+    }
+
     chart.data.labels = chartProps.xLabels;
     chart.update();
   }
