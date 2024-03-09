@@ -62,6 +62,11 @@
       text: 'Used AI to generate images',
     },
     {
+      name: 'Figma',
+      logo: '/images/svg/software/figma.svg',
+      text: 'Creating ideas and designs for our website',
+    },
+    {
       name: 'Chart.js',
       logo: '/images/svg/software/chartjs.svg',
       text: 'Creating our stock charts',
