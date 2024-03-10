@@ -71,7 +71,7 @@
   <img src="/images/crabtrader.webp" alt="CrabTrader" class="crabtrader" width="1024" height="1024" />
   <div class="stats">
     <div class="stat">
-      <p class="statName">Assets value</p>
+      <p class="statName">Assets value<span id="valueInfo">*</span></p>
       <p class="statValue">{formatter.format(assetsValue)}</p>
       <img src="/images/svg/dollar-sign.svg" alt="dollar-sign" class="statImage" />
     </div>
@@ -91,6 +91,7 @@
       <img src="/images/svg/clock.svg" alt="clock" class="statImage" />
     </div>
     <div class="crabtrader-mobile" />
+    <p class="info"><span id="valueInfo">*</span> Paper trading account</p>
   </div>
 </div>
 
@@ -102,8 +103,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: calc(100% - 100px) 100px;
-    gap: 0;
-    margin-bottom: 20px;
+    gap: 20px;
   }
 
   .title {
@@ -167,7 +167,7 @@
   .stats {
     grid-area: 2 / 1 / 3 / 3;
     background-image: linear-gradient(to bottom, #0000 0%, #111a 50%, #0000 100%);
-    transform: translateY(-75px);
+    transform: translateY(-100px);
     z-index: 1;
     display: flex;
     justify-content: space-evenly;
@@ -222,9 +222,21 @@
     opacity: 0.3;
   }
 
+  #valueInfo {
+    color: var(--primary-light);
+  }
+
+  .info {
+    width: 100%;
+    text-align: center;
+    z-index: 2;
+    transform: translateY(10px);
+  }
+
   @media (max-width: 1350px) or (max-height: 650px) {
     .hero {
       grid-template-rows: 40% 60%;
+      margin-bottom: 20px;
     }
 
     .title {
