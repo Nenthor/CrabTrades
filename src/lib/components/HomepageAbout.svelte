@@ -172,6 +172,7 @@
     text-align: center;
     line-height: calc(clamp(1rem, 2vw, 1.2rem) * 1.33);
     margin: 20px 50px;
+    max-width: 1750px;
   }
 
   .github,
