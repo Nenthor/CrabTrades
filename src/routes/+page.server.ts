@@ -5,7 +5,7 @@ import type { ChartProps, HomepageStats, Order } from '$lib/types';
 import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
 import type { PageServerLoad } from './$types';
 
-const CACHE_TIME = 0; // seconds
+const CACHE_TIME = 60; // seconds
 const TIME_PERIOD = 10; // days
 const MAX_BUBBLE_RADIUS = 8;
 const MIN_BUBBLE_RADIUS = 4;
@@ -106,23 +106,20 @@ async function getChartProps(): Promise<ChartProps[]> {
         label: symbol,
         backgroundColor: '#b42f1750',
         data: data.bars.map((b) => b.ClosePrice),
-        pointRadius: 0,
       },
       {
         type: 'bubble',
         label: 'BUY',
         data: data.buyOrders.map((o) => ({ x: o.date.toISOString(), y: findBestYCoord(o.date, data.bars), r: getRadius(o.quantity) })),
-        pointRadius: 3,
         backgroundColor: '#0f0',
-        hitRadius: 9,
+        hitRadius: MAX_BUBBLE_RADIUS,
       },
       {
         type: 'bubble',
         label: 'SELL',
         data: data.sellOrders.map((o) => ({ x: o.date.toISOString(), y: findBestYCoord(o.date, data.bars), r: getRadius(o.quantity) })),
-        pointRadius: 3,
         backgroundColor: '#f00',
-        hitRadius: 9,
+        hitRadius: MAX_BUBBLE_RADIUS,
       },
     ];
 

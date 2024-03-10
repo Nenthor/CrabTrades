@@ -5,7 +5,6 @@ export interface ChartProps {
     label: string;
     data: (number | { x: string; y: number; r: number })[];
     backgroundColor: string;
-    pointRadius?: number;
     hitRadius?: number;
   }[];
 }
