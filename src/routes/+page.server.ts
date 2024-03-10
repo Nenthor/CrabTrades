@@ -1,189 +1,158 @@
 import { ALPACA_KEY, ALPACA_SECRET } from '$env/static/private';
 import { INITIAL_CAPITAL, START_DATE, getHistoricalStockDataAwait, getPortfolioValue } from '$lib/Alpaca';
-import { readDB, readStatic } from '$lib/server/Crabbase';
+import { MAX_QUANTITY, MIN_QUANTITY, PLACEHOLDER_SYMBOLS, readDB, readStatic } from '$lib/server/Crabbase';
 import type { ChartProps, HomepageStats, Order } from '$lib/types';
+import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
 import type { PageServerLoad } from './$types';
 
+const CACHE_TIME = 60; // seconds
+const TIME_PERIOD = 10; // days
+const MAX_BUBBLE_RADIUS = 8;
+const MIN_BUBBLE_RADIUS = 4;
+const MIN_SYMBOLS = 4;
 let homepageStats: HomepageStats;
 let lastFetch = 0;
 
 export const load = (async ({ locals }) => {
   // Fetch homepage stats every minute. Otherwise, use the cached value.
-  if (!homepageStats || Date.now() - lastFetch > 60_000) {
+  if (!homepageStats || Date.now() - lastFetch > CACHE_TIME * 1000) {
     lastFetch = Date.now();
     homepageStats = await getHomepageStats();
+    console.log('Fetched in', Date.now() - lastFetch, 'ms');
   }
 
   return { isAuthanticated: locals.isAuthanticated, user: locals.user, homepageStats };
 }) satisfies PageServerLoad;
 
 async function getHomepageStats(): Promise<HomepageStats> {
-  return await new Promise(async (resolve) => {
-    let maxFetches = 3;
-    let data: HomepageStats = { assetsValue: 0, profit: 0, orders: 0, uptime: START_DATE, charts: await getTestCharts() };
+  const promises = [];
+  let data: HomepageStats = { assetsValue: 0, profit: 0, orders: 0, uptime: START_DATE, charts: [] };
 
-    readStatic().then((s) => {
-      data.orders = s.orderCount;
-      maxFetches--;
-      if (maxFetches <= 0) {
-        resolve(data);
-      }
-    });
+  promises.push(readStatic().then((s) => (data.orders = s.orderCount)));
+  promises.push(getChartProps().then((p) => (data.charts = p)));
+  promises.push(
     getPortfolioValue(ALPACA_KEY, ALPACA_SECRET).then((v) => {
       data.assetsValue = v;
-      data.profit = (v / INITIAL_CAPITAL - 1) * 100;
-      maxFetches--;
-      if (maxFetches <= 0) {
-        resolve(data);
-      }
-    });
-    getTestCharts().then((c) => {
-      data.charts = c;
-      maxFetches--;
-      if (maxFetches <= 0) {
-        resolve(data);
-      }
-    });
-  });
+      data.profit = (data.assetsValue / INITIAL_CAPITAL - 1) * 100;
+    }),
+  );
+
+  await Promise.all(promises);
+  return data;
 }
 
-// Finds two dates from datesArray that "surround" the targetDate
-function findClosestDateIndex(datesArray: Date[], targetDate: Date): [number, number] {
-  let minPositivDifference = Infinity;
-  let minNegativeDifference = Infinity;
+async function getChartProps(): Promise<ChartProps[]> {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - TIME_PERIOD);
 
-  let closestPositivIndex = -1;
-  let closestNegativIndex = -1;
+  // if start date weekend, set to friday
+  if (startDate.getDay() === 6)
+    startDate.setDate(startDate.getDate() - 1); // Saturday
+  else if (startDate.getDay() === 0) startDate.setDate(startDate.getDate() - 2); // Sunday
 
-  for (let i = 0; i < datesArray.length; i++) {
-    const currentDate = datesArray[i];
-    const difference = currentDate.getTime() - targetDate.getTime();
+  const endDate = new Date();
+  endDate.setMinutes(endDate.getMinutes() - 16); // Stock data is always delayed by 15 minutes
 
-    if (difference <= 0 && Math.abs(difference) < minNegativeDifference) {
-      minNegativeDifference = Math.abs(difference);
-      closestNegativIndex = i;
+  // Get AI orders from database
+  const orders = await readDB(startDate);
+
+  // Fetch simultaneously stock data for all stocks in orders
+  const map = new Map<string, { bars: AlpacaBar[]; buyOrders: Order[]; sellOrders: Order[] }>();
+  const promises = [];
+  for (const order of orders) {
+    if (!map.has(order.symbol)) {
+      map.set(order.symbol, { bars: [], buyOrders: [], sellOrders: [] });
+
+      promises.push(
+        getHistoricalStockDataAwait(order.symbol, startDate, endDate, '1Hour', ALPACA_KEY, ALPACA_SECRET).then((data) => {
+          const symbolData = map.get(order.symbol);
+          if (symbolData) symbolData.bars = data;
+        }),
+      );
     }
 
-    if (difference >= 0 && Math.abs(difference) < minPositivDifference) {
-      minPositivDifference = Math.abs(difference);
-      closestPositivIndex = i;
-    }
+    if (order.decision === 'BUY') map.get(order.symbol)?.buyOrders.push(order);
+    else if (order.decision === 'SELL') map.get(order.symbol)?.sellOrders.push(order);
   }
 
-  return [closestNegativIndex, closestPositivIndex];
+  // Load placeholder data for stocks if less than MIN_SYMBOLS
+  let placeholderIndex = 0;
+  while (map.size < MIN_SYMBOLS && placeholderIndex < PLACEHOLDER_SYMBOLS.length) {
+    if (map.has(PLACEHOLDER_SYMBOLS[placeholderIndex])) {
+      placeholderIndex++;
+      continue;
+    }
+
+    const symbol = PLACEHOLDER_SYMBOLS[map.size];
+    map.set(symbol, { bars: [], buyOrders: [], sellOrders: [] });
+    promises.push(
+      getHistoricalStockDataAwait(symbol, startDate, endDate, '1Hour', ALPACA_KEY, ALPACA_SECRET).then((data) => {
+        const symbolData = map.get(symbol);
+        if (symbolData) symbolData.bars = data;
+      }),
+    );
+  }
+
+  // Wait for all stock data to be fetched
+  await Promise.all(promises);
+
+  // Create chart for each stock
+  const chartProps: ChartProps[] = [];
+  for (const [symbol, data] of map) {
+    const xLabels = data.bars.map((b) => b.Timestamp);
+    const datasets: ChartProps['datasets'] = [
+      {
+        type: 'line',
+        label: symbol,
+        backgroundColor: '#b42f1750',
+        data: data.bars.map((b) => b.ClosePrice),
+      },
+      {
+        type: 'bubble',
+        label: 'BUY',
+        data: data.buyOrders.map((o) => ({ x: o.date.toISOString(), y: findBestYCoord(o.date, data.bars), r: getRadius(o.quantity) })),
+        backgroundColor: '#0f0',
+        hitRadius: MAX_BUBBLE_RADIUS,
+      },
+      {
+        type: 'bubble',
+        label: 'SELL',
+        data: data.sellOrders.map((o) => ({ x: o.date.toISOString(), y: findBestYCoord(o.date, data.bars), r: getRadius(o.quantity) })),
+        backgroundColor: '#f00',
+        hitRadius: MAX_BUBBLE_RADIUS,
+      },
+    ];
+
+    chartProps.push({ xLabels, datasets });
+  }
+
+  return chartProps;
+}
+
+function getRadius(quantity: number) {
+  const r = lerp(MIN_BUBBLE_RADIUS, MAX_BUBBLE_RADIUS, Math.min(1, Math.max(0, (quantity - MIN_QUANTITY) / (MAX_QUANTITY - MIN_QUANTITY))));
+  return Math.round(r * 10) / 10;
+}
+
+function findBestYCoord(x: Date, bars: AlpacaBar[]) {
+  for (let i = 0; i < bars.length; i++) {
+    if (new Date(bars[i].Timestamp).getTime() >= x.getTime()) {
+      if (i === 0) return bars[i].ClosePrice;
+      // (x - xMin) / (xMax - xMin)
+      const percentage =
+        (x.getTime() - new Date(bars[i - 1].Timestamp).getTime()) /
+        (new Date(bars[i].Timestamp).getTime() - new Date(bars[i - 1].Timestamp).getTime());
+
+      return lerp(
+        bars[i - 1].ClosePrice, // Too early
+        bars[i].ClosePrice, // Too late
+        percentage,
+      );
+    }
+  }
+  return 0;
 }
 
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
-}
-
-// After findClosestDateIndex() calculates average price of the two dates found
-function getAveragePriceAtDate(date: Date, alpDates: Date[], alpPrices: number[]): number {
-  const alpacaIndexes: [number, number] = findClosestDateIndex(alpDates, date);
-
-  const aDate = alpDates[alpacaIndexes[0]];
-  const bDate = alpDates[alpacaIndexes[1]];
-
-  let dstFromA = date.getTime() - aDate.getTime();
-  let dstBetweenAandB = bDate.getTime() - aDate.getTime();
-
-  // Needs to be between 0 and 1
-  let t = dstFromA / dstBetweenAandB;
-
-  let averagePrice = lerp(alpPrices[alpacaIndexes[0]], alpPrices[alpacaIndexes[1]], t);
-
-  return averagePrice;
-}
-
-async function getTestCharts() {
-  const lastWeek = new Date();
-  lastWeek.setDate(lastWeek.getDate() - 7);
-
-  const today = new Date();
-  today.setMinutes(today.getMinutes() - 16);
-
-  const AIOrders = await readDB(lastWeek);
-
-  // Sorts orders by stock symbol in different arrays
-  const sortedOrders: Order[][] = [];
-  for (let i = 0; i < AIOrders.length; i++) {
-    let stock = AIOrders[i].symbol;
-    const index = sortedOrders.findIndex((mapArr) => mapArr[0].symbol === stock);
-    if (index === -1) sortedOrders.push([AIOrders[i]]);
-    else sortedOrders[index].push(AIOrders[i]);
-  }
-
-  // Creates chart for each stock
-  const chartProps: ChartProps[] = [];
-  for (let stockIndex = 0; stockIndex < sortedOrders.length; stockIndex++) {
-    const stockArr = sortedOrders[stockIndex];
-    if (!stockArr || stockArr.length === 0) continue;
-
-    const stockSymbol = stockArr[0].symbol;
-
-    // Fetches stock data from Alpaca
-    const alpacaStockData = await getHistoricalStockDataAwait(stockSymbol, lastWeek, today, '1Hour', ALPACA_KEY, ALPACA_SECRET);
-    const alpacaPrices: number[] = [];
-    const alpacaTimestamps: string[] = [];
-    const alpacaDates: Date[] = [];
-
-    for (let index = 0; index < alpacaStockData.length; index++) {
-      alpacaPrices.push(alpacaStockData[index].OpenPrice);
-      alpacaTimestamps.push(alpacaStockData[index].Timestamp);
-      alpacaDates.push(new Date(alpacaStockData[index].Timestamp));
-    }
-
-    // Plot BUY and SELL points on the chart of alpaca
-    const BUY_CHART = [];
-    const SELL_CHART = [];
-    for (let index = 0; index < stockArr.length; index++) {
-      var indexConv = stockArr.length - index - 1; //to read array backwards
-      var fromArrDate = stockArr[indexConv].date;
-      // var size = Math.min(9, Math.max(4, stockArr[indexConv].quantity));
-      var size = lerp(3, 6, Math.min(1, Math.max(0, stockArr[indexConv].quantity - 6 / 15.0)));
-
-      if (fromArrDate.getTime() < new Date(alpacaTimestamps[0]).getTime()) continue;
-      if (fromArrDate >= today) continue;
-
-      let averagePrice = getAveragePriceAtDate(fromArrDate, alpacaDates, alpacaPrices);
-
-      if (stockArr[indexConv].decision == 'BUY') BUY_CHART.push({ x: stockArr[indexConv].date.toISOString(), y: averagePrice, r: size });
-      else if (stockArr[indexConv].decision == 'SELL') SELL_CHART.push({ x: stockArr[indexConv].date.toISOString(), y: averagePrice, r: size });
-    }
-
-    // Creates chart for that stock
-    chartProps.push({
-      xLabels: alpacaTimestamps,
-      datasets: [
-        {
-          type: 'bubble',
-          label: 'BUY',
-          data: BUY_CHART,
-          pointRadius: 3,
-          backgroundColor: '#32cd32',
-          hoverBackgroundColor: '#32cd32',
-          hitRadius: 9,
-        },
-        {
-          type: 'bubble',
-          label: 'SELL',
-          data: SELL_CHART,
-          pointRadius: 3,
-          backgroundColor: '#ff0000', //color is not optimal, almost same color as graph
-          hoverBackgroundColor: '#ff0000',
-          hitRadius: 9,
-        },
-        {
-          type: 'line',
-          label: stockSymbol,
-          backgroundColor: '#b42f1744',
-          hoverBackgroundColor: '#b42f1744',
-          data: alpacaPrices,
-          pointRadius: 0,
-        },
-      ],
-    });
-  }
-
-  return chartProps;
 }

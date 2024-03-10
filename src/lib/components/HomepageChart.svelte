@@ -109,6 +109,7 @@
 
 <div id="charts">
   <h2 class="title">AI trading history</h2>
+
   <div class="charts">
     {#each charts as chart, index}
       <button on:click={() => onChartClick(index)} id="chart{index}" class="chart" aria-label="Chart button {index + 1}">
@@ -124,6 +125,7 @@
       </button>
     </div>
   </div>
+  <p class="info">Larger dots indicate a stronger buy/sell action</p>
 </div>
 
 <style>
@@ -162,6 +164,13 @@
     height: 500px;
     width: calc(100% - 60px);
     transform: translateY(-30px);
+  }
+
+  .info {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    font-weight: 600;
+    transform: translateY(-30px);
+    text-align: center;
   }
 
   .chart {
@@ -463,6 +472,11 @@
     #chart0::after,
     #chart2::after {
       content: none;
+    }
+
+    .info {
+      transform: translateY(0px);
+      margin-bottom: 10px;
     }
   }
 </style>

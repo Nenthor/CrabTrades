@@ -4,11 +4,7 @@ export interface ChartProps {
     type: 'line' | 'bubble';
     label: string;
     data: (number | { x: string; y: number; r: number })[];
-    color?: string;
-
-    backgroundColor?: string;
-    hoverBackgroundColor?: string;
-    pointRadius?: number;
+    backgroundColor: string;
     hitRadius?: number;
   }[];
 }

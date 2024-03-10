@@ -163,7 +163,7 @@
   }
 
   .title {
-    font-size: clamp(1rem, 7vw, 3rem);
+    font-size: clamp(2rem, 7vw, 3rem);
     color: var(--primary);
   }
 
@@ -172,6 +172,7 @@
     text-align: center;
     line-height: calc(clamp(1rem, 2vw, 1.2rem) * 1.33);
     margin: 20px 50px;
+    max-width: 1750px;
   }
 
   .github,
@@ -192,14 +193,14 @@
   .software {
     flex-basis: 100%;
     max-width: 1350px;
-    width: calc(100vw - 100px);
+    width: calc(100vw - 70px);
     padding: 10px 20px 30px 20px;
   }
 
   .github > h3,
   .software > h3,
   .team > h3 {
-    font-size: clamp(1.2rem, 5vw, 1.5rem);
+    font-size: clamp(1.2rem, 7vw, 1.5rem);
     color: var(--secondary-medium);
   }
 
