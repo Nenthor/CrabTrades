@@ -1,21 +1,8 @@
 import type { Auth, Order, Static } from '$lib/types';
 import { crabbase } from './FirestoreApp';
 
-/*
-export async function getTest() {
-  console.log('Getting test');
-  const docRef = crabbase.collection('users').doc('alovelaceaiwgudakwzgd');
-
-  await docRef.set({
-    first: 'john',
-    last: 'johnson',
-    born: 22222,
-
-  
-  });
-
-}
-*/
+export const MAX_QUANTITY = 15;
+export const MIN_QUANTITY = 6;
 
 export async function writeOrder(order: Order) {
   const regexp: RegExp = /[()]/gi;
