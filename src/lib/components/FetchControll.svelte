@@ -8,13 +8,6 @@
 
   export let alpaca: { keyId: string; secretKey: string };
 
-  /*
-  const data = getHistoricalStockData(['GOOGL'], new Date('2000-01-01'), new Date('2024-02-10'), '1Min');
-  const text = await toStockString(data);
-  uploadFile('historical-stock-data', 'GOOGL.txt', text);
-  console.log('File uploaded');
-  */
-
   let status: 'Choosing' | 'Fetching' | 'Finished' = 'Choosing';
   let iterator: AsyncGenerator<AlpacaBar, void, unknown> | null = null;
   let bars: AlpacaBar[] = [];
@@ -68,6 +61,7 @@
         type: 'line',
         label: 'Stonks',
         data: [],
+        backgroundColor: '#d73d23',
       },
     ],
   };
@@ -94,6 +88,7 @@
           type: 'line',
           label: 'AAPL',
           data: [],
+          backgroundColor: '#d73d2350',
         },
       ],
     };

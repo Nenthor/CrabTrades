@@ -3,6 +3,7 @@ import { crabbase } from './FirestoreApp';
 
 export const MAX_QUANTITY = 15;
 export const MIN_QUANTITY = 6;
+export const PLACEHOLDER_SYMBOLS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA'];
 
 export async function writeOrder(order: Order) {
   const regexp: RegExp = /[()]/gi;

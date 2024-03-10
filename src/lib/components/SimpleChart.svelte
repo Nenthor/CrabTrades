@@ -35,13 +35,14 @@
       borderColor: `${dataset.backgroundColor?.slice(0, 7)}`,
       pointBorderWidth: 0,
       pointHoverRadius: 0,
-      pointHoverBackgroundColor: dataset.hoverBackgroundColor,
+      pointHoverBackgroundColor: dataset.backgroundColor,
       pointHoverBorderColor: 'rgba(220, 220, 220,1)',
       pointHoverBorderWidth: 0,
-      pointRadius: dataset.pointRadius,
-      pointHitRadius: dataset.hitRadius || 3,
+      pointRadius: dataset.pointRadius || 0,
+      pointHitRadius: dataset.hitRadius || 0,
       data: dataset.data as any,
       radius: 10,
+      order: dataset.type === 'line' ? 1 : 0,
     });
   });
 
