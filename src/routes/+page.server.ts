@@ -1,8 +1,7 @@
 import { ALPACA_KEY, ALPACA_SECRET } from '$env/static/private';
-import { INITIAL_CAPITAL, START_DATE, getHistoricalStockDataAwait, getPortfolioValue } from '$lib/Alpaca';
+import { INITIAL_CAPITAL, START_DATE, getHistoricalStockDataAwait, getPortfolioValue, type AlpacaBar } from '$lib/Alpaca';
 import { MAX_QUANTITY, MIN_QUANTITY, PLACEHOLDER_SYMBOLS, readDB, readStatic } from '$lib/server/Crabbase';
 import type { ChartProps, HomepageStats, Order } from '$lib/types';
-import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
 import type { PageServerLoad } from './$types';
 
 const CACHE_TIME = 60; // seconds
