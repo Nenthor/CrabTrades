@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { TimeFrame } from '$lib/Alpaca';
+  import type { AlpacaBar, TimeFrame } from '$lib/Alpaca';
   import { getHistoricalStockData, toStockFileString } from '$lib/Alpaca';
   import SimpleChart from '$lib/components/SimpleChart.svelte';
   import type { ChartProps } from '$lib/types';
-  import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
   import { onDestroy } from 'svelte';
 
   export let alpaca: { keyId: string; secretKey: string };
@@ -61,7 +60,7 @@
         type: 'line',
         label: 'Stonks',
         data: [],
-        backgroundColor: '#d73d23',
+        backgroundColor: '#d73d2350',
       },
     ],
   };

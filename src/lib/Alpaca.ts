@@ -1,5 +1,3 @@
-import type { AlpacaBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2';
-
 // Docs: https://github.com/alpacahq/alpaca-trade-api-js
 // Docs: https://alpaca.markets/learn/fetch-historical-data/
 
@@ -10,6 +8,7 @@ export const START_DATE = new Date('2024-02-26'); // The date the AI began tradi
 
 const historyUrl = 'https://data.alpaca.markets/v2/stocks';
 const accountUrl = 'https://paper-api.alpaca.markets/v2/account';
+
 interface RawData {
   bars: {
     c: number;
@@ -23,6 +22,18 @@ interface RawData {
   }[];
   next_page_token?: string;
   symbol: string;
+}
+
+export interface AlpacaBar {
+  ClosePrice: number;
+  HighPrice: number;
+  LowPrice: number;
+  OpenPrice: number;
+  TradeCount: number;
+  Symbol: string;
+  Timestamp: string;
+  Volume: number;
+  VWAP: number;
 }
 
 /**
@@ -68,15 +79,16 @@ export async function* getHistoricalStockData(symbol: string, start: Date, end: 
   let pageToken: string | undefined;
   do {
     const chunk = await fetchStockData(symbol, start, end, timeframe, keyId, secretKey, pageToken);
-    pageToken = chunk.next_page_token; // Can only load 1000 bars at a time - use this to load the next page
-    for (const bar of chunk.bars) {
+    pageToken = chunk.next_page_token; // Can only load 10000 bars at a time - use this to load the next page
+    for (const index in chunk.bars) {
+      const bar = chunk.bars[index];
       yield {
         ClosePrice: bar.c,
         HighPrice: bar.h,
         LowPrice: bar.l,
         OpenPrice: bar.o,
         TradeCount: bar.n,
-        Symbol: chunk.symbol,
+        Symbol: symbol,
         Timestamp: bar.t,
         Volume: bar.v,
         VWAP: bar.vw,
