@@ -22,10 +22,10 @@
       isMobile ? clearAnimationClassesMobile(index) : clearAnimationClasses(index);
 
       // Update the charts array
-      if (index === 0) {
+      if (index === 2) {
         const first = charts.shift();
         if (first) charts.push(first);
-      } else if (index === 2) {
+      } else if (index === 0) {
         const last = charts.pop();
         if (last) charts.unshift(last);
       }
@@ -41,13 +41,13 @@
     const chart3 = document.getElementById('chart3');
     const chartLast = document.getElementById(`chart${charts.length - 1}`);
 
-    if (index === 0) {
+    if (index === 2) {
       chart0?.classList.add('leftToVoid');
       chart1?.classList.add('middleToLeft');
       chart2?.classList.add('rightToMiddle');
       chart3?.classList.add('voidToRight');
       if (chart3) chart3.style.display = 'inline';
-    } else if (index === 2) {
+    } else if (index === 0) {
       chartLast?.classList.add('voidToLeft');
       chart0?.classList.add('leftToMiddle');
       chart1?.classList.add('middleToRight');
@@ -61,10 +61,10 @@
     const chart1 = document.getElementById('chart1');
     const chart2 = document.getElementById('chart2');
 
-    if (index === 0) {
+    if (index === 2) {
       chart1?.classList.add('middleToLeftMobile');
       chart2?.classList.add('rightToMiddleMobile');
-    } else if (index === 2) {
+    } else if (index === 0) {
       chart0?.classList.add('leftToMiddleMobile');
       chart1?.classList.add('middleToRightMobile');
     }
@@ -77,13 +77,13 @@
     const chart3 = document.getElementById('chart3');
     const chartLast = document.getElementById(`chart${charts.length - 1}`);
 
-    if (index === 0) {
+    if (index === 2) {
       chart0?.classList.remove('leftToVoid');
       chart1?.classList.remove('middleToLeft');
       chart2?.classList.remove('rightToMiddle');
       chart3?.classList.remove('voidToRight');
       if (chart3) chart3.style.display = 'none';
-    } else if (index === 2) {
+    } else if (index === 0) {
       chartLast?.classList.remove('voidToLeft');
       chart0?.classList.remove('leftToMiddle');
       chart1?.classList.remove('middleToRight');
@@ -97,10 +97,10 @@
     const chart1 = document.getElementById('chart1');
     const chart2 = document.getElementById('chart2');
 
-    if (index === 0) {
+    if (index === 2) {
       chart1?.classList.remove('middleToLeftMobile');
       chart2?.classList.remove('rightToMiddleMobile');
-    } else if (index === 2) {
+    } else if (index === 0) {
       chart0?.classList.remove('leftToMiddleMobile');
       chart1?.classList.remove('middleToRightMobile');
     }
