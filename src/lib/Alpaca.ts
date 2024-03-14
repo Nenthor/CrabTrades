@@ -2,9 +2,9 @@
 // Docs: https://alpaca.markets/learn/fetch-historical-data/
 
 export type TimeFrame = '1Min' | '15Min' | '30Min' | '1Hour' | '1Day' | '1Week';
-export const CSV_START = 'Symbol,Timestamp,Open,Close,Low,High,VWAP';
+export const CSV_START = 'Symbol,Timestamp,OpenPrice,ClosePrice,LowPrice,HighPrice,VWAP,Volume,TradeCount';
 export const INITIAL_CAPITAL = 100_000;
-export const START_DATE = new Date('2024-02-26'); // The date the AI began trading
+export const START_DATE = new Date('2024-02-27'); // The date the AI began trading
 
 const historyUrl = 'https://data.alpaca.markets/v2/stocks';
 const accountUrl = 'https://paper-api.alpaca.markets/v2/account';
@@ -125,7 +125,7 @@ async function fetchStockData(symbol: string, start: Date, end: Date, timeframe:
 }
 
 /**
- * Converts the bars to a CSV string in the style of `Symbol,Date,Open,High,Low,Close,Volume`
+ * Converts the bars to a CSV string in the style of 'Symbol,Timestamp,OpenPrice,ClosePrice,LowPrice,HighPrice,VWAP,Volume,TradeCount'
  * @param bars AlpacaBars
  * @returns CSV string
  */
@@ -138,12 +138,12 @@ export function toStockFileString(bars: AlpacaBar[]) {
 }
 
 /**
- * Converts single bar to a CSV string in the style of 'Symbol,Timestamp,Open,Close,Low,High,VWAP'
+ * Converts single bar to a CSV string in the style of 'Symbol,Timestamp,OpenPrice,ClosePrice,LowPrice,HighPrice,VWAP,Volume,TradeCount'
  * @param bars AlpacaBar
  * @returns CSV string
  */
 export function toStockString(bar: AlpacaBar) {
-  return `${bar.Symbol},${bar.Timestamp},${bar.OpenPrice},${bar.ClosePrice},${bar.LowPrice},${bar.HighPrice},${bar.VWAP}`;
+  return `${bar.Symbol},${bar.Timestamp},${bar.OpenPrice},${bar.ClosePrice},${bar.LowPrice},${bar.HighPrice},${bar.VWAP},${bar.Volume},${bar.TradeCount}`;
 }
 
 export async function getPortfolioValue(keyId: string, secretKey: string) {
