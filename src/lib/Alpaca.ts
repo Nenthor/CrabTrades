@@ -4,7 +4,7 @@
 export type TimeFrame = '1Min' | '15Min' | '30Min' | '1Hour' | '1Day' | '1Week';
 export const CSV_START = 'Symbol,Timestamp,OpenPrice,ClosePrice,LowPrice,HighPrice,VWAP,Volume,TradeCount';
 export const INITIAL_CAPITAL = 100_000;
-export const START_DATE = new Date('2024-02-26'); // The date the AI began trading
+export const START_DATE = new Date('2024-02-27'); // The date the AI began trading
 
 const historyUrl = 'https://data.alpaca.markets/v2/stocks';
 const accountUrl = 'https://paper-api.alpaca.markets/v2/account';
