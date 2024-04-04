@@ -13,4 +13,8 @@ if not exist "%python_script%" (
 )
 
 :: Run the Python script
-py "%python_script%".py
+py "%python_script%".py AAPL
+py "%python_script%".py NVDA
+py "%python_script%".py META
+py "%python_script%".py AMD
+py "%python_script%".py MSFT
