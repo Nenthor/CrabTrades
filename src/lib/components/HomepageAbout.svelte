@@ -129,8 +129,8 @@
         </li>
         <li class="member">
           <a href="https://github.com/lvl10Gopnik" target="_blank">
-            <img src="https://github.com/lvl10gopnik.png?size=100" alt="lvl10Gopnik GitHub Icon" title="Click Me!" />
-            <p>lvl10Gopnik</p>
+            <img src="https://github.com/lvl10gopnik.png?size=100" alt="BearWithMe GitHub Icon" title="Click Me!" />
+            <p>BearWithMe</p>
           </a>
         </li>
       </ul>
